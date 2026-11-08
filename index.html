@@ -690,7 +690,8 @@ const ICONS = {
   book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
   keyboard: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M18 12h.01M10 12h4"/>',
   zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
-  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  infinity: '<path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>'
 };
 function icon(name){ return ICONS[name] || ''; }
 
@@ -986,14 +987,15 @@ const CHAPTERS = [
    ============================================================ */
 const STORE = { 
   theme:'waFlashcards.theme', 
-  learned:'waFlashcards.learnedIds_n5_186kanji_v7', 
-  excluded:'waFlashcards.excludedIds_n5_186kanji_v7', 
+  learned:'waFlashcards.learnedIds_n5_186kanji_v8', 
+  excluded:'waFlashcards.excludedIds_n5_186kanji_v8', 
   streak:'waFlashcards.streakCount', 
   lastVisit:'waFlashcards.lastVisit',
   reverseMode:'waFlashcards.reverseMode',
   autoTTS:'waFlashcards.autoTTS',
-  typeHistory:'waFlashcards.typeQuizHistory_v6',
-  speedrunSeconds:'waFlashcards.speedrunSeconds_v6'
+  typeHistory:'waFlashcards.typeQuizHistory_v7',
+  speedrunSeconds:'waFlashcards.speedrunSeconds_v7',
+  infiniteMode:'waFlashcards.infiniteMode_v1'
 };
 function safeGet(k, fb){ try{ const r = localStorage.getItem(k); return r === null ? fb : JSON.parse(r); }catch(e){ return fb; } }
 function safeSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -1271,7 +1273,7 @@ function pickDistractors(pool, target, count){
   return cand;
 }
 
-/* MC Quiz Builder (Tanpa Spoiler Arti) */
+/* MC Quiz Builder */
 function buildMCQuestions(scopeKey){
   const pool = SCOPES[scopeKey].build();
   let qs = [];
@@ -1358,6 +1360,7 @@ const state = {
   selectedTypeUids: new Set(),
   isSpeedrun: false,
   speedrunSec: safeGet(STORE.speedrunSeconds, 10),
+  isInfinite: safeGet(STORE.infiniteMode, false),
   questionTimer: null,
   questionTimeLeft: 10,
   totalTimer: null,
@@ -1445,11 +1448,12 @@ function saveTypeHistoryEntry(q){
   const entry = {
     id: Date.now(),
     scopeKey: q.scopeKey,
-    count: q.questions.length,
+    count: q.isInfinite ? 'Infinity' : q.questions.length,
     uids: Array.from(state.selectedTypeUids),
     durationSec: state.totalElapsedSec,
     speedrun: q.isSpeedrun,
     speedrunSec: q.speedrunSec,
+    infinite: q.isInfinite,
     dateStr: new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'short' }) + ' ' + new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' })
   };
   hist.unshift(entry);
@@ -1504,7 +1508,8 @@ function startCustomTypeQuiz(){
     userInput: '',
     isCorrect: false,
     isSpeedrun: state.isSpeedrun,
-    speedrunSec: state.speedrunSec
+    speedrunSec: state.speedrunSec,
+    isInfinite: state.isInfinite
   };
   state.screen = 'quiz-play';
   render();
@@ -1521,7 +1526,8 @@ function startMCQuiz(sKey){
     correct:0, 
     wrong:0, 
     answered:false,
-    isSpeedrun:false 
+    isSpeedrun:false,
+    isInfinite:false
   };
   state.screen = 'quiz-play';
   render();
@@ -1541,7 +1547,8 @@ function startMatchQuiz(sKey){
     selected:null, 
     mistakes:0, 
     roundsCleared:0,
-    isSpeedrun:false 
+    isSpeedrun:false,
+    isInfinite:false
   };
   setupMatchRound();
   state.screen = 'quiz-play';
@@ -2002,7 +2009,7 @@ function renderQuizMode(){
         <span class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('keyboard')}</svg></span>
         <span class="m-body">
           <span class="m-title">Ketik Manual (Esai &amp; Speedrun)</span>
-          <span class="m-desc">Pilih kanji secara custom, atur timer speedrun, dan simpan riwayat pengerjaan</span>
+          <span class="m-desc">Pilih kanji secara custom, atur timer speedrun, mode infinity, dan simpan riwayat</span>
         </span>
         <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
       </button>
@@ -2038,12 +2045,13 @@ function renderTypeSelect(){
         ${histList.map(h => `
           <div class="history-item" data-load-history-id="${h.id}">
             <div class="history-left">
-              <span class="history-count">${h.count} Soal Dikerjakan</span>
+              <span class="history-count">${h.count === 'Infinity' ? 'Kanji Tak Terbatas' : h.count + ' Soal'}</span>
               <span class="history-time">${h.dateStr}</span>
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="history-badge">${formatSec(h.durationSec || 0)}</span>
-              ${h.speedrun ? `<span class="history-badge" style="color:var(--accent-sakura-deep);border-color:rgba(209,99,126,0.3);">${h.speedrunSec}s Speedrun</span>` : ''}
+              ${h.speedrun ? `<span class="history-badge" style="color:var(--accent-sakura-deep);border-color:rgba(209,99,126,0.3);">${h.speedrunSec}s</span>` : ''}
+              ${h.infinite ? `<span class="history-badge" style="color:var(--accent-gold);border-color:rgba(198,150,87,0.3);">∞</span>` : ''}
             </div>
           </div>
         `).join('')}
@@ -2061,6 +2069,7 @@ function renderTypeSelect(){
         </div>
       </div>
 
+      <!-- SPEEDRUN MODE CONTROLLER -->
       <div class="speedrun-control-card">
         <div class="speedrun-header">
           <div class="speedrun-title-box">
@@ -2087,6 +2096,23 @@ function renderTypeSelect(){
         ` : ''}
       </div>
 
+      <!-- INFINITE / TAK TERBATAS MODE CONTROLLER -->
+      <div class="speedrun-control-card">
+        <div class="speedrun-header">
+          <div class="speedrun-title-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:16px;height:16px;stroke:var(--accent-gold);">${icon('infinity')}</svg>
+            <div>
+              <div class="speedrun-title">Kanji Tak Terbatas (Infinity Mode)</div>
+              <div class="speedrun-desc">${state.isInfinite ? 'Soal diacak terus-menerus tanpa akhir' : 'Sesi berakhir setelah semua soal selesai'}</div>
+            </div>
+          </div>
+          <button class="switch-btn ${state.isInfinite ? 'is-active' : ''}" id="toggleInfiniteSwitch" role="switch" aria-checked="${state.isInfinite}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KANJI SELECTION HEADER -->
       <div class="kanji-select-bar">
         <span class="kanji-select-meta" id="selectMetaCount">${selectedCount} dari ${allCount} Kanji Terpilih</span>
         <button type="button" class="nav-btn" id="toggleSelectAllKanji" style="padding:6px 11px;font-size:11px;">
@@ -2094,16 +2120,19 @@ function renderTypeSelect(){
         </button>
       </div>
 
+      <!-- KANJI TILES GRID -->
       <div class="kanji-select-grid">
         ${gridHtml}
       </div>
 
+      <!-- ACTION BUTTON -->
       <div style="margin-top:14px;">
         <button type="button" class="nav-btn primary" id="startCustomTypeQuiz" style="width:100%;" ${selectedCount === 0 ? 'disabled' : ''}>
           Mulai Latihan (${selectedCount} Soal)<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg>
         </button>
       </div>
 
+      <!-- HISTORY PRESETS -->
       ${historyHtml}
     </div>
   `;
@@ -2137,7 +2166,13 @@ function quizHeaderHtml(title, sub){
 
 function renderQuizType(){
   const q = state.quiz;
-  if(q.index >= q.questions.length){ renderQuizResult(); return; }
+  if(!q.isInfinite && q.index >= q.questions.length){ renderQuizResult(); return; }
+  
+  if(q.isInfinite && q.index >= q.questions.length){
+    q.questions = shuffleArray(q.questions);
+    q.index = 0;
+  }
+
   const question = q.questions[q.index];
   const s = SCOPES[q.scopeKey];
 
@@ -2168,11 +2203,11 @@ function renderQuizType(){
 
   screenEl.innerHTML = `
     <div class="screen-inner">
-      ${quizHeaderHtml(s.label, q.isSpeedrun ? `Speedrun (${q.speedrunSec}s)` : 'Ketik Manual')}
+      ${quizHeaderHtml(s.label, q.isInfinite ? 'Infinity Mode (∞)' : (q.isSpeedrun ? `Speedrun (${q.speedrunSec}s)` : 'Ketik Manual'))}
       
       <div style="margin-bottom:12px;">
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;color:var(--ink-faint);margin-bottom:4px;">
-          <span>SOAL ${q.index+1} DARI ${q.questions.length}</span>
+          <span>${q.isInfinite ? 'SOAL KE-' + (q.index + 1) + ' (TAK TERBATAS)' : 'SOAL ' + (q.index+1) + ' DARI ' + q.questions.length}</span>
           ${q.isSpeedrun && !q.answered ? `
             <span class="speedrun-timer-pill" id="speedrunCountdown">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:10px;height:10px;stroke:currentColor;">${icon('zap')}</svg>
@@ -2180,7 +2215,7 @@ function renderQuizType(){
             </span>
           ` : ''}
         </div>
-        <div class="progress-bar"><span style="width:${(q.index/q.questions.length)*100}%"></span></div>
+        ${!q.isInfinite ? `<div class="progress-bar"><span style="width:${(q.index/q.questions.length)*100}%"></span></div>` : `<div class="progress-bar"><span style="width:100%;background:linear-gradient(90deg,var(--accent-gold),var(--accent-indigo));"></span></div>`}
       </div>
       
       <div class="bento quiz-question">
@@ -2299,6 +2334,9 @@ function renderQuizResult(){
   if(q.mode === 'match'){
     scoreBig = q.rounds.length;
     scoreLabel = `${q.rounds.length} Ronde Selesai (${q.mistakes} kesalahan)`;
+  } else if(q.isInfinite){
+    scoreBig = q.correct + ' Benar';
+    scoreLabel = `Sesi Infinity (Total ${q.correct + q.wrong} dikerjakan)`;
   } else {
     const pct = Math.round((q.correct/q.questions.length)*100);
     scoreBig = pct + '%';
@@ -2314,6 +2352,7 @@ function renderQuizResult(){
         <div style="font-size:11.5px;font-weight:700;color:var(--accent-indigo);margin-top:6px;">
           Total Waktu Pengerjaan: ${formatSec(state.totalElapsedSec)}
           ${q.isSpeedrun ? ` · Mode Speedrun (${q.speedrunSec}s)` : ''}
+          ${q.isInfinite ? ` · Infinity Mode` : ''}
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;">
@@ -2378,7 +2417,6 @@ screenEl.addEventListener('click', (e)=>{
   const openQuizMode = e.target.closest('[data-open-quiz-mode]');
   if(openQuizMode){ goQuizMode(openQuizMode.getAttribute('data-open-quiz-mode')); return; }
 
-  /* Tombol Export TXT (Kelompok Lengkap) */
   const exportBtn = e.target.closest('[data-export-chap]');
   if(exportBtn){
     const cid = exportBtn.getAttribute('data-export-chap');
@@ -2407,9 +2445,15 @@ screenEl.addEventListener('click', (e)=>{
   const startType = e.target.closest('[data-start-type]');
   if(startType){ openTypeSelect(startType.getAttribute('data-start-type')); return; }
 
-  /* Interaksi Mode Speedrun & Stepper */
   if(e.target.closest('#toggleSpeedrunSwitch')){
     state.isSpeedrun = !state.isSpeedrun;
+    renderTypeSelect();
+    return;
+  }
+
+  if(e.target.closest('#toggleInfiniteSwitch')){
+    state.isInfinite = !state.isInfinite;
+    safeSet(STORE.infiniteMode, state.isInfinite);
     renderTypeSelect();
     return;
   }
@@ -2428,7 +2472,6 @@ screenEl.addEventListener('click', (e)=>{
     return;
   }
 
-  /* Interaksi Pemilihan Soal Ketik Manual (Checkbox Kanji) */
   const tileKanji = e.target.closest('[data-toggle-kanji-uid]');
   if(tileKanji){
     const uid = tileKanji.getAttribute('data-toggle-kanji-uid');
@@ -2451,7 +2494,6 @@ screenEl.addEventListener('click', (e)=>{
     return;
   }
 
-  /* Load Preset dari History */
   const histItem = e.target.closest('[data-load-history-id]');
   if(histItem){
     const hId = parseInt(histItem.getAttribute('data-load-history-id'), 10);
@@ -2461,6 +2503,7 @@ screenEl.addEventListener('click', (e)=>{
       state.selectedTypeUids = new Set(found.uids.filter(uid => state.typeSelectionPool.some(item => item.uniqueId === uid)));
       if(found.speedrun !== undefined) state.isSpeedrun = found.speedrun;
       if(found.speedrunSec) state.speedrunSec = found.speedrunSec;
+      if(found.infinite !== undefined) state.isInfinite = found.infinite;
       renderTypeSelect();
     }
     return;
