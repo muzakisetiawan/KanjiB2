@@ -1,0 +1,2616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>和 Flashcards — Belajar 186 Kanji Dasar N5 & JFT A2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --radius-xl: 24px;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --gap: 10px;
+    --ease: cubic-bezier(.22,.9,.3,1);
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; }
+  body{
+    min-height:100dvh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    background:#e8e2da;
+    font-family:'Poppins','Noto Sans JP',sans-serif;
+  }
+  button, input{ font:inherit; }
+
+  /* ============ FURIGANA & KANJI TYPOGRAPHY ============ */
+  ruby { ruby-align: center; }
+  rt { font-size: 0.58em; font-family: 'Noto Sans JP', sans-serif; font-weight: 500; color: var(--accent-indigo); letter-spacing: 0; line-height: 1; }
+
+  /* ============ THEME TOKENS ============ */
+  .app{
+    --bg-sky-top: #ffe7ec;
+    --bg-sky-mid: #fff1ea;
+    --bg-sky-bot: #fdf7f0;
+    --ink: #2b241f;
+    --ink-soft: #7a6d64;
+    --ink-faint: #a89a90;
+    --card-bg: #ffffff;
+    --card-bg-soft: #fffaf6;
+    --card-border: rgba(43,36,31,0.08);
+    --accent-sakura: #e78fa6;
+    --accent-sakura-deep: #d1637e;
+    --accent-indigo: #3d5a78;
+    --accent-gold: #c69657;
+    --fuji-fill: #b7c3da;
+    --fuji-snow: #ffffff;
+    --hill-fill: #cdd9c9;
+    --tower-color: #9fb0c9;
+    --shadow-soft: 0 10px 24px rgba(70,45,40,0.08);
+    --shadow-card: 0 12px 30px rgba(70,45,40,0.10);
+    --color-correct: #4f9d6e;
+    --color-wrong: #c65c56;
+    --sun-op: 1; --moon-op: 0; --star-op: 0; --bird-op: .55;
+    --transition: background .5s var(--ease), color .5s var(--ease), border-color .5s var(--ease);
+    --font-kanji: 'Noto Sans JP', sans-serif;
+  }
+  .app[data-theme="dark"]{
+    --bg-sky-top: #171a30;
+    --bg-sky-mid: #10101f;
+    --bg-sky-bot: #0b0b14;
+    --ink: #f2ede4;
+    --ink-soft: #b6aec2;
+    --ink-faint: #6c6480;
+    --card-bg: #1b1d30;
+    --card-bg-soft: #20223a;
+    --card-border: rgba(244,239,231,0.09);
+    --accent-sakura: #e6a3b8;
+    --accent-sakura-deep: #f0b6c7;
+    --accent-indigo: #9fc0e8;
+    --accent-gold: #e3c283;
+    --fuji-fill: #232544;
+    --fuji-snow: #3a3c66;
+    --hill-fill: #191a30;
+    --tower-color: #cba15f;
+    --shadow-soft: 0 10px 24px rgba(0,0,0,0.4);
+    --shadow-card: 0 14px 34px rgba(0,0,0,0.48);
+    --color-correct: #7fd9a0;
+    --color-wrong: #f08a86;
+    --sun-op: 0; --moon-op: 1; --star-op: 1; --bird-op: 0;
+  }
+
+  /* ============ SHELL ============ */
+  .app{
+    position:relative; width:100%; max-width:420px; min-height:100dvh;
+    overflow-x:hidden; overflow-y:auto;
+    background: linear-gradient(180deg, var(--bg-sky-top) 0%, var(--bg-sky-mid) 45%, var(--bg-sky-bot) 100%);
+    color:var(--ink); transition:var(--transition);
+    box-shadow: 0 0 50px rgba(0,0,0,0.15);
+  }
+  .scenery{ position:absolute; top:0; left:0; right:0; height:180px; overflow:hidden; pointer-events:none; z-index:0; }
+  .scenery svg{ width:100%; height:100%; display:block; }
+  .scenery .sun-disc{ opacity:var(--sun-op); transition:opacity .6s var(--ease); }
+  .scenery .moon-disc{ opacity:var(--moon-op); transition:opacity .6s var(--ease); }
+  .scenery .stars{ opacity:var(--star-op); transition:opacity .6s var(--ease); }
+  .scenery .birds{ opacity:var(--bird-op); transition:opacity .6s var(--ease); }
+  .scenery .fuji-body{ fill:var(--fuji-fill); transition:fill .5s var(--ease); }
+  .scenery .fuji-snow{ fill:var(--fuji-snow); transition:fill .5s var(--ease); }
+  .scenery .hill{ fill:var(--hill-fill); transition:fill .5s var(--ease); }
+  .scenery .tower-lines{ stroke:var(--tower-color); transition:stroke .5s var(--ease); }
+
+  .petals{ position:absolute; inset:0; height:280px; z-index:1; pointer-events:none; overflow:hidden; }
+  .petal{ position:absolute; top:-10%; width:8px; height:8px; background:var(--accent-sakura); border-radius:0 100% 0 100%; opacity:.7; animation: fall linear infinite; transition: background .5s var(--ease); }
+  @keyframes fall{ 0%{ transform: translate(0,0) rotate(0deg);} 100%{ transform: translate(var(--drift,30px), 280px) rotate(340deg);} }
+
+  /* ============ TOPBAR & LIVE COUNTER ============ */
+  .content{ position:relative; z-index:2; padding: 14px 14px 24px; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:8px; }
+  .brand{ display:flex; flex-direction:column; gap:2px; }
+  .brand .eyebrow{ font-family:'Noto Sans JP',sans-serif; font-size:10px; letter-spacing:.14em; font-weight:600; color:var(--ink-soft); text-transform:uppercase; }
+  .brand .title{ display:flex; align-items:baseline; gap:6px; font-family:'Zen Kaku Gothic New','Poppins',sans-serif; font-weight:900; font-size:20px; color:var(--ink); }
+  .brand .rule{ width:30px; height:2.5px; border-radius:2px; margin-top:3px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-sakura)); }
+
+  .topbar-actions{ display:flex; align-items:center; gap:8px; }
+  
+  .live-counter{
+    display:inline-flex; align-items:center; gap:5px;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    padding:5px 9px; border-radius:999px;
+    box-shadow:var(--shadow-soft);
+    font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:600;
+    color:var(--ink); transition:var(--transition);
+    white-space:nowrap;
+  }
+  .pulse-dot{
+    width:6px; height:6px; background-color:#22c55e; border-radius:50%;
+    box-shadow:0 0 0 0 rgba(34,197,94,0.7);
+    animation:livePulse 1.8s infinite cubic-bezier(0.66,0,0,1);
+    flex-shrink:0;
+  }
+  @keyframes livePulse{
+    0%{ box-shadow:0 0 0 0 rgba(34,197,94,0.7); }
+    70%{ box-shadow:0 0 0 6px rgba(34,197,94,0); }
+    100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
+  }
+
+  .theme-toggle{ position:relative; width:48px; height:26px; border-radius:999px; border:1px solid var(--card-border); background:var(--card-bg); box-shadow: var(--shadow-soft); cursor:pointer; display:flex; align-items:center; padding:2px; transition:var(--transition); flex-shrink:0; }
+  .theme-toggle .knob{ width:20px; height:20px; border-radius:50%; background: linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); display:flex; align-items:center; justify-content:center; transform: translateX(0); transition: transform .4s var(--ease); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+  .app[data-theme="dark"] .theme-toggle .knob{ transform: translateX(22px); }
+  .theme-toggle .knob svg{ width:11px; height:11px; }
+  .theme-toggle .icon-static{ position:absolute; }
+  .theme-toggle .icon-static.sun{ left:6px; } .theme-toggle .icon-static.moon{ right:5px; }
+  .theme-toggle .icon-static svg{ width:11px; height:11px; opacity:.55; }
+  .theme-toggle .icon-static.sun svg{ stroke:var(--accent-gold); }
+  .theme-toggle .icon-static.moon svg{ stroke:var(--accent-indigo); }
+
+  /* ============ SCREEN TRANSITION ============ */
+  .screen-inner{ animation: screenIn .35s var(--ease); }
+  @keyframes screenIn{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ============ BENTO BASE ============ */
+  .bento-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .bento{ background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg); box-shadow:var(--shadow-soft); transition:var(--transition); }
+  .span-2{ grid-column: 1 / -1; }
+
+  .stat-tile{ padding:14px 14px 12px; display:flex; flex-direction:column; gap:8px; }
+  .stat-tile .icon-wrap{ width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background: linear-gradient(155deg, rgba(198,150,87,.16), rgba(231,143,166,.16)); }
+  .stat-tile .icon-wrap svg{ width:16px; height:16px; stroke:var(--accent-gold); }
+  .stat-tile.learned .icon-wrap svg{ stroke:var(--accent-indigo); }
+  .stat-tile .num{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; line-height:1; color:var(--ink); }
+  .stat-tile .num .unit{ font-size:12px; font-weight:500; color:var(--ink-soft); margin-left:2px; }
+  .stat-tile .cap{ font-family:'Noto Sans JP',sans-serif; font-size:11px; color:var(--ink-soft); font-weight:500; }
+
+  .section-label{ font-family:'Noto Sans JP',sans-serif; font-size:10.5px; font-weight:600; letter-spacing:.08em; color:var(--ink-faint); text-transform:uppercase; margin: 16px 2px 8px; }
+
+  .progress-bar{ width:100%; height:4px; border-radius:4px; background:var(--card-border); overflow:hidden; }
+  .progress-bar span{ display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--accent-gold),var(--accent-sakura)); transition:width .4s var(--ease); }
+
+  /* Accent styling */
+  .accent-gold .emblem, .accent-gold .g-icon, .g-icon.accent-gold{ background:linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); }
+  .accent-indigo .emblem, .accent-indigo .g-icon, .g-icon.accent-indigo{ background:linear-gradient(155deg, var(--accent-indigo), var(--accent-gold)); }
+  .accent-sakura .emblem, .accent-sakura .g-icon, .g-icon.accent-sakura{ background:linear-gradient(155deg, var(--accent-sakura-deep), var(--accent-indigo)); }
+  .accent-gold{ --tile-glow: var(--accent-gold); }
+  .accent-indigo{ --tile-glow: var(--accent-indigo); }
+  .accent-sakura{ --tile-glow: var(--accent-sakura-deep); }
+
+  /* ============ HERO TILES ============ */
+  .bab-tile{ display:block; width:100%; text-align:left; border:1px solid var(--card-border); background:var(--card-bg); border-radius:var(--radius-xl); padding:16px; box-shadow:var(--shadow-soft); cursor:pointer; position:relative; overflow:hidden; margin-bottom:12px; color:var(--ink); }
+  .bab-tile .glow{ position:absolute; width:150px; height:150px; border-radius:50%; filter:blur(6px); opacity:.3; top:-50px; right:-40px; background: radial-gradient(circle, var(--tile-glow, var(--accent-indigo)), transparent 70%); }
+  .bab-tile .emblem{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:10px; position:relative; z-index:1; box-shadow:0 6px 14px rgba(0,0,0,.10); }
+  .bab-tile .emblem svg{ width:22px; height:22px; stroke:#fff; }
+  .bab-tile .eyebrow{ position:relative; z-index:1; font-family:'Noto Sans JP',sans-serif; font-size:10px; letter-spacing:.12em; font-weight:600; color:var(--ink-faint); text-transform:uppercase; }
+  .bab-tile .bab-title{ position:relative; z-index:1; font-family:'Zen Kaku Gothic New',sans-serif; font-weight:900; font-size:17px; margin:3px 0 5px; color:var(--ink); line-height:1.25; }
+  .bab-tile .bab-desc{ position:relative; z-index:1; font-family:'Noto Sans JP',sans-serif; font-size:11.5px; color:var(--ink-soft); line-height:1.45; margin-bottom:12px; }
+  .bab-tile .bab-meta{ position:relative; z-index:1; display:flex; gap:14px; margin-bottom:10px; }
+  .bab-tile .bab-meta .meta-num{ font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:var(--ink); }
+  .bab-tile .bab-meta .meta-label{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; color:var(--ink-faint); }
+  .bab-tile .bab-progress{ position:relative; z-index:1; }
+
+  .bab-tile.accent-indigo{ background: linear-gradient(150deg, color-mix(in srgb, var(--accent-indigo) 18%, var(--card-bg)) 0%, color-mix(in srgb, var(--accent-gold) 8%, var(--card-bg)) 100%); border-color: color-mix(in srgb, var(--accent-indigo) 30%, var(--card-border)); }
+  .bab-tile.accent-sakura{ background: linear-gradient(150deg, color-mix(in srgb, var(--accent-sakura-deep) 18%, var(--card-bg)) 0%, color-mix(in srgb, var(--accent-indigo) 8%, var(--card-bg)) 100%); border-color: color-mix(in srgb, var(--accent-sakura-deep) 30%, var(--card-border)); }
+  .bab-tile.accent-gold{ background: linear-gradient(150deg, color-mix(in srgb, var(--accent-gold) 18%, var(--card-bg)) 0%, color-mix(in srgb, var(--accent-sakura-deep) 8%, var(--card-bg)) 100%); border-color: color-mix(in srgb, var(--accent-gold) 30%, var(--card-border)); }
+
+  .bab-tile.test-cta{
+    background: linear-gradient(150deg, color-mix(in srgb, var(--accent-indigo) 18%, var(--card-bg)) 0%, color-mix(in srgb, var(--accent-sakura-deep) 12%, var(--card-bg)) 50%, color-mix(in srgb, var(--accent-gold) 12%, var(--card-bg)) 100%);
+    border-color: color-mix(in srgb, var(--accent-indigo) 30%, var(--card-border));
+    --tile-glow: var(--accent-indigo);
+  }
+  .bab-tile.test-cta .emblem{ background: linear-gradient(155deg, var(--accent-indigo), var(--accent-sakura-deep)); }
+
+  /* ============ GROUP ROWS ============ */
+  .group-row{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg); padding:12px; box-shadow:var(--shadow-soft); cursor:pointer; margin-bottom:8px; }
+  .group-row .g-icon{ width:40px; height:40px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .group-row .g-icon svg{ width:18px; height:18px; stroke:#fff; }
+  .group-row .g-body{ flex:1; min-width:0; }
+  .group-row .g-title{ font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:1px; }
+  .group-row .g-desc{ font-family:'Noto Sans JP',sans-serif; font-size:11px; color:var(--ink-soft); margin-bottom:5px; line-height:1.35; }
+  .group-row .g-tags{ display:flex; gap:5px; flex-wrap:wrap; }
+  .group-row .g-tag{ font-family:'Poppins',sans-serif; font-size:9px; font-weight:600; padding:2px 7px; border-radius:999px; background:var(--card-bg-soft); color:var(--ink-soft); border:1px solid var(--card-border); white-space:nowrap; }
+  .group-row .g-tag.page-tag{ background:rgba(198,150,87,.18); color:var(--accent-gold); border-color:transparent; font-weight:700; }
+  .group-row .g-tag.done{ background:rgba(79,157,110,.16); color:var(--color-correct); border-color:transparent; }
+  .group-row .g-chevron{ flex-shrink:0; opacity:.45; }
+  .group-row .g-chevron svg{ width:15px; height:15px; stroke:var(--ink-soft); }
+
+  .group-row.accent-indigo{ background: linear-gradient(120deg, color-mix(in srgb, var(--accent-indigo) 12%, var(--card-bg)) 0%, var(--card-bg) 65%); border-color: color-mix(in srgb, var(--accent-indigo) 25%, var(--card-border)); }
+  .group-row.accent-sakura{ background: linear-gradient(120deg, color-mix(in srgb, var(--accent-sakura-deep) 12%, var(--card-bg)) 0%, var(--card-bg) 65%); border-color: color-mix(in srgb, var(--accent-sakura-deep) 25%, var(--card-border)); }
+  .group-row.accent-gold{ background: linear-gradient(120deg, color-mix(in srgb, var(--accent-gold) 12%, var(--card-bg)) 0%, var(--card-bg) 65%); border-color: color-mix(in srgb, var(--accent-gold) 25%, var(--card-border)); }
+
+  /* ============ BACK ROW ============ */
+  .back-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .back-btn{ width:32px; height:32px; border-radius:10px; background:var(--card-bg); border:1px solid var(--card-border); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-soft); cursor:pointer; flex-shrink:0; }
+  .back-btn svg{ width:14px; height:14px; stroke:var(--ink-soft); }
+  .crumb{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
+  .crumb .eyebrow{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; letter-spacing:.12em; font-weight:600; color:var(--ink-faint); text-transform:uppercase; }
+  .crumb .crumb-title{ font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; font-size:15px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* ============ COMPACT FLASHCARD ============ */
+  .meta-bar{ padding:8px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; border-radius:14px; }
+  .meta-bar .meta-left{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .meta-bar .meta-cat{ font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:11.5px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .meta-bar .meta-page{ font-family:'Poppins',sans-serif; font-size:10px; font-weight:600; color:var(--accent-gold); }
+  .meta-bar .meta-right{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; min-width:72px; }
+  .meta-bar .meta-count{ font-family:'Poppins',sans-serif; font-size:10px; font-weight:600; color:var(--ink-soft); white-space:nowrap; }
+
+  .flashcard{
+    position:relative; width:100%; height:195px; cursor:pointer; margin-bottom:12px;
+    perspective:1200px; -webkit-perspective:1200px;
+  }
+  .exclude-btn{
+    position:absolute; top:-8px; right:-6px; z-index:10;
+    width:30px; height:30px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    box-shadow:var(--shadow-soft); cursor:pointer;
+    transition:var(--transition), transform .2s var(--ease);
+  }
+  .exclude-btn svg{ width:13px; height:13px; stroke:var(--ink-soft); }
+  .exclude-btn:active{ transform:scale(.9); }
+  .exclude-btn.is-excluded{ background: linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); border-color:transparent; }
+  .exclude-btn.is-excluded svg{ stroke:#fff; }
+
+  .flashcard-inner{
+    position:relative; width:100%; height:100%;
+    transition: transform .6s var(--ease);
+    transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner{
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+  }
+
+  .face{
+    position:absolute; inset:0; width:100%; height:100%;
+    border-radius:var(--radius-lg); padding:12px 14px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    box-shadow:var(--shadow-card); transition:var(--transition);
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    transform: translate3d(0,0,0); -webkit-transform: translate3d(0,0,0);
+  }
+  .face.front{
+    transform: rotateY(0deg); -webkit-transform: rotateY(0deg);
+    z-index:2;
+  }
+  .face.back{
+    transform: rotateY(180deg); -webkit-transform: rotateY(180deg);
+    z-index:1;
+  }
+
+  .face-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:6px; }
+  .face-top-left{ display:flex; align-items:center; gap:5px; min-width:0; }
+  .badge{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; font-weight:600; padding:3px 8px; border-radius:999px; background: rgba(198,150,87,.14); color:var(--accent-gold); letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .badge.blue{ background:rgba(61,90,120,.12); color:var(--accent-indigo); }
+  .badge.sakura{ background:rgba(209,99,126,.14); color:var(--accent-sakura-deep); }
+
+  .learned-badge{ width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, var(--accent-gold), var(--accent-sakura-deep)); opacity:0; transform:scale(.4); transition: opacity .35s var(--ease), transform .35s var(--ease); flex-shrink:0; }
+  .learned-badge svg{ width:9px; height:9px; stroke:#fff; }
+  .flashcard.is-learned .learned-badge{ opacity:1; transform:scale(1); }
+
+  /* KANJI LIGHT 300 TYPOGRAPHY */
+  .font-kanji{ font-family:'Noto Sans JP',sans-serif; font-weight:300; font-synthesis:none; }
+
+  .face-mid{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; padding:2px 0; min-height:0; }
+  .kanji-display{ font-family:'Noto Sans JP',sans-serif; font-size:32px; font-weight:300; color:var(--ink); line-height:1.2; letter-spacing:0.03em; }
+
+  /* Kanji compound items styling */
+  .kanji-word-list{ display:flex; flex-direction:column; gap:4px; width:100%; max-height:115px; overflow-y:auto; padding:1px 0; }
+  .kanji-word-item{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--card-bg-soft); border:1px solid var(--card-border);
+    padding:5px 9px; border-radius:8px; gap:6px;
+  }
+  .kanji-word-jp{ font-family:'Noto Sans JP',sans-serif; font-size:15px; font-weight:300; color:var(--ink); }
+  .kanji-word-id{ font-family:'Poppins',sans-serif; font-size:11px; font-weight:600; color:var(--ink-soft); text-align:right; }
+
+  .face-bottom{ display:flex; align-items:center; justify-content:center; gap:5px; flex-shrink:0; }
+  .flip-hint{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; color:var(--ink-faint); display:flex; align-items:center; gap:4px; }
+  .flip-hint svg{ width:10px; height:10px; stroke:var(--ink-faint); }
+
+  .arti-label{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-sakura-deep); }
+  .arti-text{ font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; color:var(--ink); line-height:1.3; padding:0 2px; text-align:center; }
+
+  /* ============ NAV ROW ============ */
+  .nav-row{ display:grid; grid-template-columns:1fr auto 1fr; gap:var(--gap); align-items:center; }
+  .shuffle-btn{ width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--card-bg); border:1.5px dashed var(--card-border); box-shadow:var(--shadow-soft); cursor:pointer; flex-shrink:0; transition:var(--transition), transform .25s var(--ease); }
+  .shuffle-btn svg{ width:16px; height:16px; stroke:var(--ink-soft); }
+  .shuffle-btn.is-active{ background: linear-gradient(155deg, var(--accent-indigo), var(--accent-sakura-deep)); border-style:solid; border-color:transparent; }
+  .shuffle-btn.is-active svg{ stroke:#fff; }
+  .nav-btn{ display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 12px; border-radius:12px; font-family:'Noto Sans JP',sans-serif; font-weight:600; font-size:12px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--card-border); background:var(--card-bg); }
+  .nav-btn svg{ width:13px; height:13px; stroke:var(--ink-soft); }
+  .nav-btn[disabled]{ opacity:.4; cursor:not-allowed; }
+  .nav-btn.primary{ background: linear-gradient(135deg, var(--accent-indigo), var(--accent-sakura-deep)); color:#fff; border-color:transparent; }
+  .nav-btn.primary svg{ stroke:#fff; }
+  .deck-count{ text-align:center; margin-top:8px; font-family:'Poppins',sans-serif; font-size:10.5px; letter-spacing:.06em; color:var(--ink-faint); }
+
+  /* ============ TOGGLE CONTROLS ============ */
+  .deck-controls{ display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .control-toggle-card{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:8px 10px; background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:12px; box-shadow:var(--shadow-soft); transition:var(--transition);
+  }
+  .control-label{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .control-icon{
+    width:26px; height:26px; border-radius:8px; background:var(--card-bg-soft);
+    border:1px solid var(--card-border); display:flex; align-items:center;
+    justify-content:center; flex-shrink:0;
+  }
+  .control-icon svg{ width:13px; height:13px; stroke:var(--accent-indigo); }
+  .control-icon.sakura svg{ stroke:var(--accent-sakura-deep); }
+  .control-text{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .control-title{ font-family:'Noto Sans JP',sans-serif; font-size:11.5px; font-weight:700; color:var(--ink); line-height:1.2; }
+  .control-sub{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; color:var(--ink-soft); line-height:1.15; }
+
+  .switch-btn{
+    position:relative; width:42px; height:22px; border-radius:999px;
+    background:var(--card-border); border:1px solid var(--card-border);
+    cursor:pointer; padding:2px; transition:background .3s var(--ease), border-color .3s var(--ease);
+    flex-shrink:0;
+  }
+  .switch-btn .switch-knob{
+    display:block; width:16px; height:16px; border-radius:50%;
+    background:#ffffff; box-shadow:0 1.5px 4px rgba(0,0,0,0.25);
+    transform:translateX(0); transition:transform .3s var(--ease);
+  }
+  .switch-btn.is-active{
+    background:linear-gradient(135deg, var(--accent-indigo), var(--accent-sakura-deep));
+    border-color:transparent;
+  }
+  .switch-btn.is-active .switch-knob{
+    transform:translateX(20px);
+  }
+
+  /* ============ QUIZ, MATCH & ESSAY TYPE ============ */
+  .mode-card{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg); padding:14px 12px; box-shadow:var(--shadow-soft); cursor:pointer; margin-bottom:10px; }
+  .mode-card .m-icon{ width:42px; height:42px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background: linear-gradient(155deg, var(--accent-indigo), var(--accent-gold)); }
+  .mode-card .m-icon svg{ width:19px; height:19px; stroke:#fff; }
+  .mode-card.mode-match .m-icon{ background: linear-gradient(155deg, var(--accent-sakura-deep), var(--accent-indigo)); }
+  .mode-card.mode-type .m-icon{ background: linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); }
+  .mode-card .m-body{ flex:1; min-width:0; }
+  .mode-card .m-title{ font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:2px; }
+  .mode-card .m-desc{ font-family:'Noto Sans JP',sans-serif; font-size:11px; color:var(--ink-soft); line-height:1.4; }
+
+  .score-chip{ font-family:'Poppins',sans-serif; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px; }
+  .score-chip.correct{ background: color-mix(in srgb, var(--color-correct) 18%, var(--card-bg)); color:var(--color-correct); }
+  .score-chip.wrong{ background: color-mix(in srgb, var(--color-wrong) 18%, var(--card-bg)); color:var(--color-wrong); }
+  .quiz-question{ padding:18px 14px; text-align:center; margin-bottom:12px; }
+  .quiz-option{ display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; text-align:left; padding:12px 14px; border-radius:var(--radius-md); background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px; cursor:pointer; }
+  .quiz-option.is-correct{ border-color:var(--color-correct); background: color-mix(in srgb, var(--color-correct) 14%, var(--card-bg)); }
+  .quiz-option.is-wrong{ border-color:var(--color-wrong); background: color-mix(in srgb, var(--color-wrong) 14%, var(--card-bg)); }
+  .quiz-option.is-disabled{ pointer-events:none; opacity:.8; }
+
+  .match-columns{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; }
+  .match-col{ display:flex; flex-direction:column; gap:6px; }
+  .match-tile{ padding:8px; border-radius:10px; background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:600; color:var(--ink); text-align:center; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; }
+  .match-tile.is-selected{ border-color:var(--accent-indigo); background: color-mix(in srgb, var(--accent-indigo) 16%, var(--card-bg)); }
+  .match-tile.is-correct{ border-color:var(--color-correct); background: color-mix(in srgb, var(--color-correct) 16%, var(--card-bg)); opacity:.55; pointer-events:none; }
+  .match-tile.is-wrong{ border-color:var(--color-wrong); background: color-mix(in srgb, var(--color-wrong) 18%, var(--card-bg)); }
+
+  /* ============ SPEEDRUN & TIMER STYLING ============ */
+  .speedrun-control-card{
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:12px;
+    box-shadow:var(--shadow-soft); display:flex; flex-direction:column; gap:10px;
+  }
+  .speedrun-header{ display:flex; align-items:center; justify-content:space-between; }
+  .speedrun-title-box{ display:flex; align-items:center; gap:8px; }
+  .speedrun-title{ font-size:12px; font-weight:700; color:var(--ink); }
+  .speedrun-desc{ font-size:10px; color:var(--ink-soft); }
+  
+  .stepper-box{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--card-bg-soft); border:1px solid var(--card-border);
+    border-radius:10px; padding:6px 10px;
+  }
+  .stepper-label{ font-size:11px; font-weight:600; color:var(--ink-soft); }
+  .stepper-actions{ display:flex; align-items:center; gap:8px; }
+  .step-btn{
+    width:28px; height:28px; border-radius:8px; border:1px solid var(--card-border);
+    background:var(--card-bg); font-weight:700; font-size:14px; color:var(--ink);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-soft); transition:all .15s ease;
+  }
+  .step-btn:active{ transform:scale(0.92); }
+  .step-value{ font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; min-width:38px; text-align:center; color:var(--accent-indigo); }
+
+  .speedrun-timer-pill{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:'Poppins',sans-serif; font-size:11px; font-weight:700;
+    padding:4px 9px; border-radius:999px; background:rgba(209,99,126,0.15);
+    color:var(--accent-sakura-deep); border:1px solid rgba(209,99,126,0.3);
+  }
+  .speedrun-timer-pill.urgent{
+    background:#c65c56; color:#fff; border-color:transparent;
+    animation:pulseUrgent .6s infinite alternate;
+  }
+  @keyframes pulseUrgent{ from{ transform:scale(1); } to{ transform:scale(1.06); } }
+
+  .stopwatch-badge{
+    display:inline-flex; align-items:center; gap:4px; font-family:'Poppins',sans-serif;
+    font-size:10.5px; font-weight:600; color:var(--ink-soft);
+  }
+
+  /* ============ TYPE FILTER & SELECTION ============ */
+  .kanji-select-bar{ display:flex; justify-content:space-between; align-items:center; margin:10px 0 8px; }
+  .kanji-select-meta{ font-family:'Poppins',sans-serif; font-size:11px; font-weight:600; color:var(--ink-soft); }
+  .kanji-select-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap:8px;
+    max-height:42vh; overflow-y:auto; padding:4px 2px 8px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .kanji-check-tile{
+    position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:12px;
+    padding:14px 4px; cursor:pointer; transition:all .2s var(--ease); user-select:none;
+    font-family:'Noto Sans JP', sans-serif; font-weight:300; font-size:22px; color:var(--ink);
+    box-shadow:var(--shadow-soft);
+  }
+  .kanji-check-tile:active{ transform:scale(0.95); }
+  .kanji-check-tile.is-checked{
+    border-color:var(--accent-indigo);
+    background:color-mix(in srgb, var(--accent-indigo) 14%, var(--card-bg));
+  }
+  .kanji-check-indicator{
+    position:absolute; top:4px; right:4px; width:13px; height:13px; border-radius:4px;
+    border:1px solid var(--card-border); display:flex; align-items:center; justify-content:center;
+    background:var(--card-bg-soft); transition:all .2s ease;
+  }
+  .kanji-check-tile.is-checked .kanji-check-indicator{
+    background:linear-gradient(135deg, var(--accent-indigo), var(--accent-sakura-deep));
+    border-color:transparent;
+  }
+  .kanji-check-indicator svg{ width:8px; height:8px; stroke:#fff; stroke-width:3; display:none; }
+  .kanji-check-tile.is-checked .kanji-check-indicator svg{ display:block; }
+
+  /* ============ HISTORY PRESET LIST ============ */
+  .history-box{ margin-top:16px; border-top:1px dashed var(--card-border); padding-top:12px; }
+  .history-box-title{ font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .history-item{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:10px; padding:8px 10px; margin-bottom:6px; cursor:pointer;
+    box-shadow:var(--shadow-soft); transition:border-color .2s var(--ease);
+  }
+  .history-item:hover{ border-color:var(--accent-indigo); }
+  .history-left{ display:flex; flex-direction:column; gap:1px; }
+  .history-count{ font-family:'Poppins',sans-serif; font-size:11.5px; font-weight:700; color:var(--ink); }
+  .history-time{ font-family:'Poppins',sans-serif; font-size:9.5px; color:var(--ink-faint); }
+  .history-badge{ font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:600; padding:2px 7px; border-radius:6px; background:var(--card-bg-soft); color:var(--accent-indigo); border:1px solid var(--card-border); }
+
+  /* ============ TYPE MODE STYLING ============ */
+  .type-form{ display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .type-input{
+    width:100%; padding:13px 14px; border-radius:var(--radius-md);
+    background:var(--card-bg); border:1.5px solid var(--card-border);
+    font-family:'Zen Kaku Gothic New','Poppins',sans-serif; font-size:16px; font-weight:700;
+    color:var(--ink); box-shadow:var(--shadow-soft); transition:border-color .3s var(--ease), box-shadow .3s var(--ease);
+    outline:none; text-align:center;
+  }
+  .type-input:focus{ border-color:var(--accent-indigo); box-shadow:0 0 0 3px rgba(61,90,120,0.2); }
+  .type-input[disabled]{ opacity:0.85; background:var(--card-bg-soft); }
+  .type-feedback{
+    padding:12px 14px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:6px;
+    margin-top:6px; animation:screenIn .25s var(--ease); text-align:left;
+  }
+  .type-feedback.correct{
+    background:color-mix(in srgb, var(--color-correct) 15%, var(--card-bg));
+    border:1.5px solid var(--color-correct);
+  }
+  .type-feedback.wrong{
+    background:color-mix(in srgb, var(--color-wrong) 15%, var(--card-bg));
+    border:1.5px solid var(--color-wrong);
+  }
+  .feedback-header{ display:flex; align-items:center; justify-content:space-between; }
+  .feedback-title{ font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:6px; }
+  .type-feedback.correct .feedback-title{ color:var(--color-correct); }
+  .type-feedback.wrong .feedback-title{ color:var(--color-wrong); }
+  .feedback-answer{ font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.35; }
+  .feedback-romaji{ font-size:11px; color:var(--accent-indigo); font-style:italic; }
+
+  .result-card{ padding:26px 18px; text-align:center; }
+  .result-card .r-icon{ width:50px; height:50px; border-radius:16px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; background: linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); }
+  .result-card .r-icon svg{ width:24px; height:24px; stroke:#fff; }
+  .result-card .r-score{ font-family:'Poppins',sans-serif; font-weight:800; font-size:34px; color:var(--ink); line-height:1; }
+
+  .reset-link{ display:block; margin:14px auto 0; padding:6px 12px; background:none; border:none; cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-size:10.5px; font-weight:500; color:var(--ink-faint); text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="app" data-theme="light" id="app">
+
+  <div class="scenery" aria-hidden="true">
+    <svg viewBox="0 0 400 180" preserveAspectRatio="xMidYMax slice">
+      <circle class="stars" cx="40" cy="25" r="1.2" fill="#f2ecff"/>
+      <circle class="stars" cx="90" cy="45" r="1" fill="#f2ecff"/>
+      <circle class="stars" cx="330" cy="20" r="1.1" fill="#f2ecff"/>
+      <circle class="stars" cx="360" cy="50" r="1" fill="#f2ecff"/>
+      <circle class="sun-disc" cx="330" cy="40" r="22" fill="#ffd9a8" opacity="0.9"/>
+      <circle class="moon-disc" cx="330" cy="40" r="17" fill="#efe6c9" opacity="0.95"/>
+      <path class="birds" d="M40,50 q5,-6 10,0 q5,-6 10,0" stroke="#7a6d64" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path class="fuji-body" d="M0,165 L128,48 C136,38 144,38 150,48 L160,35 C166,28 174,28 180,35 L192,50 C198,42 206,42 212,50 L400,165 Z"/>
+      <path class="fuji-snow" d="M126,58 L150,32 L158,45 L167,35 L176,46 L184,36 L198,55 L188,52 L176,58 L167,50 L158,58 L148,52 L138,58 Z"/>
+      <path class="hill" d="M-10,175 C60,150 110,155 180,175 C240,190 300,180 410,175 L410,200 L-10,200 Z"/>
+      <g class="tower-lines" fill="none" stroke-width="1.8" stroke-linecap="round">
+        <path d="M258,170 L282,62 L306,170"/>
+        <line x1="282" y1="62" x2="282" y2="36"/>
+        <line x1="266" y1="142" x2="298" y2="142"/>
+      </g>
+    </svg>
+    <div class="petals" id="petals"></div>
+  </div>
+
+  <div class="content">
+    <div class="topbar">
+      <div class="brand">
+        <span class="eyebrow">JLPT N5 & JFT A2 · 186 KANJI LENGKAP</span>
+        <span class="title"><span>和</span> Flashcards</span>
+        <span class="rule"></span>
+      </div>
+      <div class="topbar-actions">
+        <!-- Live Counter -->
+        <div class="live-counter">
+          <span class="pulse-dot"></span>
+          <span id="user-count">1 sedang belajar</span>
+        </div>
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema">
+          <span class="icon-static sun"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
+          <span class="icon-static moon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></span>
+          <span class="knob"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" id="knobIcon"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
+        </button>
+      </div>
+    </div>
+
+    <div id="screen"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FIREBASE REALTIME DATABASE (LIVE ONLINE COUNTER)
+     ============================================================ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getDatabase, 
+    ref, 
+    onValue, 
+    push, 
+    onDisconnect, 
+    set 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpVcVo-yn0plYtIe1Us68MOZ7CVcc1o8w",
+    authDomain: "flashcardo12.firebaseapp.com",
+    databaseURL: "https://flashcardo12-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "flashcardo12",
+    storageBucket: "flashcardo12.firebasestorage.app",
+    messagingSenderId: "77098450793",
+    appId: "1:77098450793:web:97319437563d90447bc7f8"
+  };
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const countElement = document.getElementById("user-count");
+    const connectedRef = ref(db, ".info/connected");
+    const onlineUsersRef = ref(db, "online_users");
+
+    onValue(connectedRef, (snap) => {
+      if (snap.val() === true) {
+        const myUserRef = push(onlineUsersRef);
+        set(myUserRef, { joinedAt: Date.now() });
+        onDisconnect(myUserRef).remove();
+      }
+    });
+
+    onValue(onlineUsersRef, (snap) => {
+      const totalOnline = snap.exists() ? Object.keys(snap.val()).length : 1;
+      if (countElement) {
+        countElement.textContent = `${totalOnline} sedang belajar`;
+      }
+    });
+  } catch (err) {
+    const countElement = document.getElementById("user-count");
+    if (countElement) countElement.textContent = "1 sedang belajar";
+  }
+</script>
+
+<script>
+/* ============================================================
+   ICONS
+   ============================================================ */
+const ICONS = {
+  scale: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h18"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  chevLeft: '<path d="M15 18l-6-6 6-6"/>',
+  chevRight: '<path d="M9 18l6-6-6-6"/>',
+  speaker: '<path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>',
+  flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 17a2.5 2.5 0 0 0 2.5-2.5c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7.5 7.5 0 1 1-15 0c0-1.153.433-2.294 1-3 1.5-1.5 2-1.5 2-1.5"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.3"/>',
+  shuffle: '<path d="M2 18h1.4c1.4 0 2.7-.7 3.4-1.9L11 10M2 6h1.4c1.4 0 2.7.7 3.4 1.9l.4.6"/><path d="M22 18h-1.4c-1.4 0-2.7-.7-3.4-1.9L13 10M22 6h-1.4c-1.4 0-2.7.7-3.4 1.9L13 14"/><path d="M18 14l4 4-4 4M18 2l4 4-4 4"/>',
+  archive: '<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><line x1="10" y1="12" x2="14" y2="12"/>',
+  clipboard: '<rect x="7" y="3" width="10" height="4" rx="1"/><path d="M9 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M9 12h6M9 16h6"/>',
+  link: '<path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/>',
+  trophy: '<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/>',
+  close: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  layers: '<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>',
+  scroll: '<path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2Z"/><path d="M12 11h4M12 7h4M8 7h.01M8 11h.01M8 15h8"/>',
+  hanko: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/><line x1="12" y1="2.4" x2="12" y2="5.6"/><line x1="12" y1="18.4" x2="12" y2="21.6"/><line x1="2.4" y1="12" x2="5.6" y2="12"/><line x1="18.4" y1="12" x2="21.6" y2="12"/>',
+  swap: '<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  alert: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  keyboard: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M18 12h.01M10 12h4"/>',
+  zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+};
+function icon(name){ return ICONS[name] || ''; }
+
+/* ============ DATA BUILDER ============ */
+function k(kanji, words){ return { type:'kanji', kanji, words }; }
+
+const CHAPTERS = [
+  {
+    id: 'paket_1',
+    number: '01',
+    title: 'Paket 1: 62 Kanji Dasar',
+    desc: '62 Kanji Dasar N5 (No. 1–62) dibagi ke dalam 6 sub-kelompok tematik',
+    icon: 'hanko', accent: 'accent-gold',
+    groups: [
+      {
+        id: 'p1_g1', title: '1. Makanan, Minuman & Sifat Dasar', desc: '10 Kanji: 魚, 肉, 卵, 水, 食べます, 飲みます, 大きい, dll. (No. 1–10)', page: 'No. 1–10', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-gold',
+        cards: [
+          k('魚', [{ kanjiText:'魚', jp:'<ruby>魚<rt>さかな</rt></ruby>', kana:'さかな', id:'Ikan', romaji:'sakana' }]),
+          k('肉', [{ kanjiText:'肉', jp:'<ruby>肉<rt>にく</rt></ruby>', kana:'にく', id:'Daging', romaji:'niku' }]),
+          k('卵', [{ kanjiText:'卵', jp:'<ruby>卵<rt>たまご</rt></ruby>', kana:'たまご', id:'Telur', romaji:'tamago' }]),
+          k('水', [{ kanjiText:'水', jp:'<ruby>水<rt>みず</rt></ruby>', kana:'みず', id:'Air', romaji:'mizu' }]),
+          k('食べます', [{ kanjiText:'食べます', jp:'<ruby>食<rt>た</rt></ruby>べます', kana:'たべます', id:'Makan', romaji:'tabemasu' }]),
+          k('飲みます', [{ kanjiText:'飲みます', jp:'<ruby>飲<rt>の</rt></ruby>みます', kana:'のみます', id:'Minum', romaji:'nomimasu' }]),
+          k('大きい', [{ kanjiText:'大きい', jp:'<ruby>大<rt>おお</rt></ruby>きい', kana:'おおきい', id:'Besar', romaji:'ookii' }]),
+          k('小さい', [{ kanjiText:'小さい', jp:'<ruby>小<rt>ちい</rt></ruby>さい', kana:'ちいさい', id:'Kecil', romaji:'chiisai' }]),
+          k('新しい', [{ kanjiText:'新しい', jp:'<ruby>新<rt>あたら</rt></ruby>しい', kana:'あたらしい', id:'Baru', romaji:'atarashii' }]),
+          k('古い', [{ kanjiText:'古い', jp:'<ruby>古<rt>ふる</rt></ruby>い', kana:'ふるい', id:'Lama, usang', romaji:'furui' }])
+        ]
+      },
+      {
+        id: 'p1_g2', title: '2. Waktu, Jam & Nama Hari', desc: '10 Kanji: ～時, ～分, ～半, 月曜日 s/d 日曜日 (No. 11–20)', page: 'No. 11–20', kategori: 'Kanji N5', icon: 'target', accent: 'accent-sakura',
+        cards: [
+          k('～時', [{ kanjiText:'～時', jp:'～<ruby>時<rt>じ</rt></ruby>', kana:'～じ', id:'~ jam', romaji:'~ji' }]),
+          k('～分', [{ kanjiText:'～分', jp:'～<ruby>分<rt>ふん</rt></ruby>', kana:'～ふん、ぷん、ぶん', id:'~ menit', romaji:'~fun, pun, bun' }]),
+          k('～半', [{ kanjiText:'～半', jp:'～<ruby>半<rt>はん</rt></ruby>', kana:'～はん', id:'~ setengah', romaji:'~han' }]),
+          k('月曜日', [{ kanjiText:'月曜日', jp:'<ruby>月<rt>げつ</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'げつようび', id:'Senin', romaji:'getsuyoubi' }]),
+          k('火曜日', [{ kanjiText:'火曜日', jp:'<ruby>火<rt>か</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'かようび', id:'Selasa', romaji:'kayoubi' }]),
+          k('水曜日', [{ kanjiText:'水曜日', jp:'<ruby>水<rt>すい</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'すいようび', id:'Rabo', romaji:'suiyoubi' }]),
+          k('木曜日', [{ kanjiText:'木曜日', jp:'<ruby>木<rt>もく</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'もくようび', id:'Kamis', romaji:'mokuyoubi' }]),
+          k('金曜日', [{ kanjiText:'金曜日', jp:'<ruby>金<rt>きん</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'きんようび', id:'Jumat', romaji:'kinyoubi' }]),
+          k('土曜日', [{ kanjiText:'土曜日', jp:'<ruby>土<rt>ど</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'どようび', id:'Sabtu', romaji:'doyoubi' }]),
+          k('日曜日', [{ kanjiText:'日曜日', jp:'<ruby>日<rt>にち</rt></ruby><ruby>曜<rt>よう</rt></ruby><ruby>日<rt>び</rt></ruby>', kana:'にちようび', id:'Minggu', romaji:'nichiyoubi' }])
+        ]
+      },
+      {
+        id: 'p1_g3', title: '3. Komunikasi & Panca Indra', desc: '6 Kanji: 言います, 話します, 読みます, 見ます, 聞きます, 書きます (No. 21–26)', page: 'No. 21–26', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-indigo',
+        cards: [
+          k('言います', [{ kanjiText:'言います', jp:'<ruby>言<rt>い</rt></ruby>います', kana:'いいます', id:'Berkata', romaji:'iimasu' }]),
+          k('話します', [{ kanjiText:'話します', jp:'<ruby>話<rt>はな</rt></ruby>します', kana:'はなします', id:'Berbicara', romaji:'hanashimasu' }]),
+          k('読みます', [{ kanjiText:'読みます', jp:'<ruby>読<rt>よ</rt></ruby>みます', kana:'よみます', id:'Membaca', romaji:'yomimasu' }]),
+          k('見ます', [{ kanjiText:'見ます', jp:'<ruby>見<rt>み</rt></ruby>ます', kana:'みます', id:'Melihat', romaji:'mimasu' }]),
+          k('聞きます', [{ kanjiText:'聞きます', jp:'<ruby>聞<rt>き</rt></ruby>きます', kana:'ききます', id:'Mendengarkan', romaji:'kikimasu' }]),
+          k('書きます', [{ kanjiText:'書きます', jp:'<ruby>書<rt>か</rt></ruby>きます', kana:'かきます', id:'Menulis', romaji:'kakimasu' }])
+        ]
+      },
+      {
+        id: 'p1_g4', title: '4. Angka 1–10 & Satuan Kalender', desc: '13 Kanji: 一 s/d 十, ～年, ～月, ～日 (No. 27–39)', page: 'No. 27–39', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-gold',
+        cards: [
+          k('一', [{ kanjiText:'一', jp:'<ruby>一<rt>いち</rt></ruby>', kana:'いち', id:'Satu', romaji:'ichi' }]),
+          k('二', [{ kanjiText:'二', jp:'<ruby>二<rt>に</rt></ruby>', kana:'に', id:'Dua', romaji:'ni' }]),
+          k('三', [{ kanjiText:'三', jp:'<ruby>三<rt>さん</rt></ruby>', kana:'さん', id:'Tiga', romaji:'san' }]),
+          k('四', [{ kanjiText:'四', jp:'<ruby>四<rt>よん</rt></ruby>', kana:'よん、し', id:'Empat', romaji:'yon, shi' }]),
+          k('五', [{ kanjiText:'五', jp:'<ruby>五<rt>ご</rt></ruby>', kana:'ご', id:'Lima', romaji:'go' }]),
+          k('六', [{ kanjiText:'六', jp:'<ruby>六<rt>ろく</rt></ruby>', kana:'ろく', id:'Enam', romaji:'roku' }]),
+          k('七', [{ kanjiText:'七', jp:'<ruby>七<rt>なな</rt></ruby>', kana:'なな、しち', id:'Tujuh', romaji:'nana, shichi' }]),
+          k('八', [{ kanjiText:'八', jp:'<ruby>八<rt>はち</rt></ruby>', kana:'はち', id:'Delapan', romaji:'hachi' }]),
+          k('九', [{ kanjiText:'九', jp:'<ruby>九<rt>きゅう</rt></ruby>', kana:'きゅう', id:'Sembilan', romaji:'kyuu' }]),
+          k('十', [{ kanjiText:'十', jp:'<ruby>十<rt>じゅう</rt></ruby>', kana:'じゅう', id:'Sepuluh', romaji:'juu' }]),
+          k('～年', [{ kanjiText:'～年', jp:'～<ruby>年<rt>ねん</rt></ruby>', kana:'～ねん', id:'~ tahun', romaji:'~nen' }]),
+          k('～月', [{ kanjiText:'～月', jp:'～<ruby>月<rt>がつ</rt></ruby>', kana:'～がつ', id:'~ bulan', romaji:'~gatsu' }]),
+          k('～日', [{ kanjiText:'～日', jp:'～<ruby>日<rt>にち</rt></ruby>', kana:'～にち', id:'~ tanggal', romaji:'~nichi' }])
+        ]
+      },
+      {
+        id: 'p1_g5', title: '5. Arah Mata Angin & Pintu Stasiun', desc: '9 Kanji: 東, 西, 南, 北, ～口, 東口 s/d 北口 (No. 40–48)', page: 'No. 40–48', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-sakura',
+        cards: [
+          k('東', [{ kanjiText:'東', jp:'<ruby>東<rt>ひがし</rt></ruby>', kana:'ひがし', id:'Timur', romaji:'higashi' }]),
+          k('西', [{ kanjiText:'西', jp:'<ruby>西<rt>にし</rt></ruby>', kana:'にし', id:'Barat', romaji:'nishi' }]),
+          k('南', [{ kanjiText:'南', jp:'<ruby>南<rt>みなみ</rt></ruby>', kana:'みなみ', id:'Selatan', romaji:'minami' }]),
+          k('北', [{ kanjiText:'北', jp:'<ruby>北<rt>きた</rt></ruby>', kana:'きた', id:'Utara', romaji:'kita' }]),
+          k('～口', [{ kanjiText:'～口', jp:'～<ruby>口<rt>ぐち</rt></ruby>', kana:'～ぐち', id:'~ pintu', romaji:'~guchi' }]),
+          k('東口', [{ kanjiText:'東口', jp:'<ruby>東<rt>ひがし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'ひがしぐち', id:'Pintu timur', romaji:'higashiguchi' }]),
+          k('西口', [{ kanjiText:'西口', jp:'<ruby>西<rt>にし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'にしぐち', id:'Pintu barat', romaji:'nishiguchi' }]),
+          k('南口', [{ kanjiText:'南口', jp:'<ruby>南<rt>みなみ</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'みなみぐち', id:'Pintu selatan', romaji:'minamiguchi' }]),
+          k('北口', [{ kanjiText:'北口', jp:'<ruby>北<rt>きた</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'きたぐち', id:'Pintu utara', romaji:'kitaguchi' }])
+        ]
+      },
+      {
+        id: 'p1_g6', title: '6. Belanja, Uang & Aksi Mobilitas', desc: '13 Kanji: 買います, 買い物, お金, 百, 万, 行きます, dll. (No. 49–62)', page: 'No. 49–62', kategori: 'Kanji N5', icon: 'target', accent: 'accent-indigo',
+        cards: [
+          k('買います', [{ kanjiText:'買います', jp:'<ruby>買<rt>か</rt></ruby>います', kana:'かいます', id:'Membeli', romaji:'kaimasu' }]),
+          k('買い物', [{ kanjiText:'買い物', jp:'<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>', kana:'かいもの', id:'Belanja', romaji:'kaimono' }]),
+          k('お金', [{ kanjiText:'お金', jp:'お<ruby>金<rt>かね</rt></ruby>', kana:'おかね', id:'Uang', romaji:'okane' }]),
+          k('～円', [{ kanjiText:'～円', jp:'～<ruby>円<rt>えん</rt></ruby>', kana:'～えん', id:'~ yen', romaji:'~en' }]),
+          k('百', [{ kanjiText:'百', jp:'<ruby>百<rt>ひゃく</rt></ruby>', kana:'ひゃく', id:'100', romaji:'hyaku' }]),
+          k('万', [{ kanjiText:'万', jp:'<ruby>万<rt>まん</rt></ruby>', kana:'まん', id:'10000', romaji:'man' }]),
+          k('百円', [{ kanjiText:'百円', jp:'<ruby>百<rt>ひゃく</rt></ruby><ruby>円<rt>えん</rt></ruby>', kana:'ひゃくえん', id:'100 yen', romaji:'hyakuen' }]),
+          k('千円', [{ kanjiText:'千円', jp:'<ruby>千<rt>せん</rt></ruby><ruby>円<rt>えん</rt></ruby>', kana:'せんえん', id:'1000 yen', romaji:'senen' }]),
+          k('一万円', [{ kanjiText:'一万円', jp:'<ruby>一<rt>いち</rt></ruby><ruby>万<rt>まん</rt></ruby><ruby>円<rt>えん</rt></ruby>', kana:'いちまんえん', id:'10000 yen', romaji:'ichimanen' }]),
+          k('行きます', [{ kanjiText:'行きます', jp:'<ruby>行<rt>い</rt></ruby>きます', kana:'いきます', id:'Pergi', romaji:'ikimasu' }]),
+          k('来ます', [{ kanjiText:'来ます', jp:'<ruby>来<rt>き</rt></ruby>ます', kana:'きます', id:'Datang', romaji:'kimasu' }]),
+          k('会います', [{ kanjiText:'会います', jp:'<ruby>会<rt>あ</rt></ruby>います', kana:'あいます', id:'Bertemu', romaji:'aimasu' }]),
+          k('休みます', [{ kanjiText:'休みます', jp:'<ruby>休<rt>やす</rt></ruby>みます', kana:'やすみます', id:'Libur, istirahat', romaji:'yasumimasu' }])
+        ]
+      }
+    ]
+  },
+  {
+    id: 'paket_2',
+    number: '02',
+    title: 'Paket 2: 62 Kanji Lanjutan',
+    desc: '62 Kanji Dasar N5 & JFT A2 (No. 63–125) terbagi dalam 4 sub-kelompok tematik',
+    icon: 'target', accent: 'accent-sakura',
+    groups: [
+      {
+        id: 'p2_g1', title: '1. Identitas, Keluarga & Bahasa', desc: '20 Kanji: 日本, 東京, 私, 父, 母, 子供, 国, 日本語, dll. (No. 63–82)', page: 'No. 63–82', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-sakura',
+        cards: [
+          k('日本', [{ kanjiText:'日本', jp:'<ruby>日本<rt>にほん</rt></ruby>', kana:'にほん', id:'Jepang', romaji:'nihon' }]),
+          k('東京', [{ kanjiText:'東京', jp:'<ruby>東京<rt>とうきょう</rt></ruby>', kana:'とうきょう', id:'Tokyo', romaji:'toukyou' }]),
+          k('私', [{ kanjiText:'私', jp:'<ruby>私<rt>わたし</rt></ruby>', kana:'わたし', id:'Saya', romaji:'watashi' }]),
+          k('父', [{ kanjiText:'父', jp:'<ruby>父<rt>ちち</rt></ruby>', kana:'ちち', id:'Ayah', romaji:'chichi' }]),
+          k('母', [{ kanjiText:'母', jp:'<ruby>母<rt>はは</rt></ruby>', kana:'はは', id:'Ibu', romaji:'haha' }]),
+          k('子供', [{ kanjiText:'子供', jp:'<ruby>子供<rt>こども</rt></ruby>', kana:'こども', id:'Anak', romaji:'kodomo' }]),
+          k('男', [{ kanjiText:'男', jp:'<ruby>男<rt>おとこ</rt></ruby>', kana:'おとこ', id:'Laki-laki', romaji:'otoko' }]),
+          k('女', [{ kanjiText:'女', jp:'<ruby>女<rt>おんな</rt></ruby>', kana:'おんな', id:'Perempuan', romaji:'onna' }]),
+          k('人', [{ kanjiText:'人', jp:'<ruby>人<rt>ひと</rt></ruby>', kana:'ひと', id:'Orang', romaji:'hito' }]),
+          k('お父さん', [{ kanjiText:'お父さん', jp:'お<ruby>父<rt>とう</rt></ruby>さん', kana:'おとうさん', id:'Ayah (orang lain)', romaji:'otousan' }]),
+          k('お母さん', [{ kanjiText:'お母さん', jp:'お<ruby>母<rt>かあ</rt></ruby>さん', kana:'おかあさん', id:'Ibu (orang lain)', romaji:'okaasan' }]),
+          k('何人', [{ kanjiText:'何人', jp:'<ruby>何人<rt>なんにん</rt></ruby>', kana:'なんにん', id:'Berapa orang', romaji:'nannin' }]),
+          k('国', [{ kanjiText:'国', jp:'<ruby>国<rt>くに</rt></ruby>', kana:'くに', id:'Negara', romaji:'kuni' }]),
+          k('外国', [{ kanjiText:'外国', jp:'<ruby>外国<rt>がいこく</rt></ruby>', kana:'がいこく', id:'Luar negeri', romaji:'gaikoku' }]),
+          k('～語', [{ kanjiText:'～語', jp:'～<ruby>語<rt>ご</rt></ruby>', kana:'～ご', id:'~ Bahasa', romaji:'~go' }]),
+          k('日本語', [{ kanjiText:'日本語', jp:'<ruby>日本語<rt>にほんご</rt></ruby>', kana:'にほんご', id:'Bahasa Jepang', romaji:'nihongo' }]),
+          k('英語', [{ kanjiText:'英語', jp:'<ruby>英語<rt>えいご</rt></ruby>', kana:'えいご', id:'Bahasa Inggris', romaji:'eigo' }]),
+          k('中国語', [{ kanjiText:'中国語', jp:'<ruby>中国語<rt>ちゅうごくご</rt></ruby>', kana:'ちゅうごくご', id:'Bahasa China', romaji:'chuugokugo' }]),
+          k('～人', [{ kanjiText:'～人', jp:'～<ruby>人<rt>じん</rt></ruby>', kana:'～じん、～にん', id:'~ orang', romaji:'~jin, ~nin' }]),
+          k('日本人', [{ kanjiText:'日本人', jp:'<ruby>日本人<rt>にほんじん</rt></ruby>', kana:'にほんじん', id:'Orang Jepang', romaji:'nihonjin' }])
+        ]
+      },
+      {
+        id: 'p2_g2', title: '2. Minat, Musim & Alam', desc: '13 Kanji: 好き, 本, 読書, 春, 夏, 秋, 冬, 花, 海, 山, 川, dll. (No. 83–95)', page: 'No. 83–95', kategori: 'Kanji N5', icon: 'book', accent: 'accent-gold',
+        cards: [
+          k('好き', [{ kanjiText:'好き', jp:'<ruby>好<rt>す</rt></ruby>き', kana:'すき', id:'Suka', romaji:'suki' }]),
+          k('本', [{ kanjiText:'本', jp:'<ruby>本<rt>ほん</rt></ruby>', kana:'ほん', id:'Buku', romaji:'hon' }]),
+          k('読書', [{ kanjiText:'読書', jp:'<ruby>読書<rt>どくしょ</rt></ruby>', kana:'どくしょ', id:'Bacaan', romaji:'dokusho' }]),
+          k('何', [{ kanjiText:'何', jp:'<ruby>何<rt>なに</rt></ruby>', kana:'なに', id:'Apa', romaji:'nani' }]),
+          k('春', [{ kanjiText:'春', jp:'<ruby>春<rt>はる</rt></ruby>', kana:'はる', id:'Musim semi', romaji:'haru' }]),
+          k('夏', [{ kanjiText:'夏', jp:'<ruby>夏<rt>なつ</rt></ruby>', kana:'なつ', id:'Musim panas', romaji:'natsu' }]),
+          k('秋', [{ kanjiText:'秋', jp:'<ruby>秋<rt>あき</rt></ruby>', kana:'あき', id:'Musim gugur', romaji:'aki' }]),
+          k('冬', [{ kanjiText:'冬', jp:'<ruby>冬<rt>ふゆ</rt></ruby>', kana:'ふゆ', id:'Musim dingin', romaji:'fuyu' }]),
+          k('今', [{ kanjiText:'今', jp:'<ruby>今<rt>いま</rt></ruby>', kana:'いま', id:'Sekarang', romaji:'ima' }]),
+          k('花', [{ kanjiText:'花', jp:'<ruby>花<rt>はな</rt></ruby>', kana:'はな', id:'Bunga', romaji:'hana' }]),
+          k('海', [{ kanjiText:'海', jp:'<ruby>海<rt>うみ</rt></ruby>', kana:'うみ', id:'Laut', romaji:'umi' }]),
+          k('山', [{ kanjiText:'山', jp:'<ruby>山<rt>やま</rt></ruby>', kana:'やま', id:'Gunung', romaji:'yama' }]),
+          k('川', [{ kanjiText:'川', jp:'<ruby>川<rt>かわ</rt></ruby>', kana:'かわ', id:'Sungai', romaji:'kawa' }])
+        ]
+      },
+      {
+        id: 'p2_g3', title: '3. Cuaca & Lingkungan Kota', desc: '11 Kanji: 今日, 天気, 晴れ, 雨, 雪, 雲, 風, 空, 町, 店, 人気 (No. 96–106)', page: 'No. 96–106', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-indigo',
+        cards: [
+          k('今日', [{ kanjiText:'今日', jp:'<ruby>今日<rt>きょう</rt></ruby>', kana:'きょう', id:'Hari ini', romaji:'kyou' }]),
+          k('天気', [{ kanjiText:'天気', jp:'<ruby>天気<rt>てんき</rt></ruby>', kana:'てんき', id:'Cuaca', romaji:'tenki' }]),
+          k('晴れ', [{ kanjiText:'晴れ', jp:'<ruby>晴<rt>は</rt></ruby>れ', kana:'はれ', id:'Cerah', romaji:'hare' }]),
+          k('雨', [{ kanjiText:'雨', jp:'<ruby>雨<rt>あめ</rt></ruby>', kana:'あめ', id:'Hujan', romaji:'ame' }]),
+          k('雪', [{ kanjiText:'雪', jp:'<ruby>雪<rt>ゆき</rt></ruby>', kana:'ゆき', id:'Salju', romaji:'yuki' }]),
+          k('雲', [{ kanjiText:'雲', jp:'<ruby>雲<rt>くも</rt></ruby>', kana:'くも', id:'Mendung', romaji:'kumo' }]),
+          k('風', [{ kanjiText:'風', jp:'<ruby>風<rt>かぜ</rt></ruby>', kana:'かぜ', id:'Angin', romaji:'kaze' }]),
+          k('空', [{ kanjiText:'空', jp:'<ruby>空<rt>そら</rt></ruby>', kana:'そら', id:'Langit', romaji:'sora' }]),
+          k('町', [{ kanjiText:'町', jp:'<ruby>町<rt>まち</rt></ruby>', kana:'まち', id:'Kota', romaji:'machi' }]),
+          k('店', [{ kanjiText:'店', jp:'<ruby>店<rt>みせ</rt></ruby>', kana:'みせ', id:'Toko', romaji:'mise' }]),
+          k('人気', [{ kanjiText:'人気', jp:'<ruby>人気<rt>にんき</rt></ruby>', kana:'にんき', id:'Popularitas, ketenaran', romaji:'ninki' }])
+        ]
+      },
+      {
+        id: 'p2_g4', title: '4. Sifat, Posisi, Warna & Lokasi', desc: '18 Kanji: 多い, 少ない, 高い, 安い, 道, 右, 左, 赤い, 時間, 駅, dll. (No. 107–125)', page: 'No. 107–125', kategori: 'Kanji N5', icon: 'scale', accent: 'accent-sakura',
+        cards: [
+          k('多い', [{ kanjiText:'多い', jp:'<ruby>多<rt>おお</rt></ruby>い', kana:'おおい', id:'Banyak', romaji:'ooi' }]),
+          k('少ない', [{ kanjiText:'少ない', jp:'<ruby>少<rt>すく</rt></ruby>ない', kana:'すくない', id:'Sedikit', romaji:'sukunai' }]),
+          k('高い', [{ kanjiText:'高い', jp:'<ruby>高<rt>たか</rt></ruby>い', kana:'たかい', id:'Mahal', romaji:'takai' }]),
+          k('安い', [{ kanjiText:'安い', jp:'<ruby>安<rt>やす</rt></ruby>い', kana:'やすい', id:'Murah', romaji:'yasui' }]),
+          k('道', [{ kanjiText:'道', jp:'<ruby>道<rt>みち</rt></ruby>', kana:'みち', id:'Jalan', romaji:'michi' }]),
+          k('通り', [{ kanjiText:'通り', jp:'<ruby>通<rt>とお</rt></ruby>り', kana:'とおり', id:'Jalan', romaji:'toori' }]),
+          k('右', [{ kanjiText:'右', jp:'<ruby>右<rt>みぎ</rt></ruby>', kana:'みぎ', id:'Kanan', romaji:'migi' }]),
+          k('左', [{ kanjiText:'左', jp:'<ruby>左<rt>ひだり</rt></ruby>', kana:'ひだり', id:'Kiri', romaji:'hidari' }]),
+          k('一つ', [{ kanjiText:'一つ', jp:'<ruby>一<rt>ひと</rt></ruby>つ', kana:'ひとつ', id:'Satu buah', romaji:'hitotsu' }]),
+          k('二つ', [{ kanjiText:'二つ', jp:'<ruby>二<rt>ふた</rt></ruby>つ', kana:'ふたつ', id:'Dua buah', romaji:'futatsu' }]),
+          k('赤い', [{ kanjiText:'赤い', jp:'<ruby>赤<rt>あか</rt></ruby>い', kana:'あかい', id:'Merah', romaji:'akai' }]),
+          k('青い', [{ kanjiText:'青い', jp:'<ruby>青<rt>あお</rt></ruby>い', kana:'あおい', id:'Biru', romaji:'aoi' }]),
+          k('黒い', [{ kanjiText:'黒い', jp:'<ruby>黒<rt>くろ</rt></ruby>い', kana:'くろい', id:'Hitam', romaji:'kuroi' }]),
+          k('白い', [{ kanjiText:'白い', jp:'<ruby>白<rt>しろ</rt></ruby>い', kana:'しろい', id:'Putih', romaji:'shiroi' }]),
+          k('時間', [{ kanjiText:'時間', jp:'<ruby>時間<rt>じかん</rt></ruby>', kana:'じかん', id:'Waktu', romaji:'jikan' }]),
+          k('場所', [{ kanjiText:'場所', jp:'<ruby>場所<rt>ばしょ</rt></ruby>', kana:'ばしょ', id:'Tempat', romaji:'basho' }]),
+          k('駅', [{ kanjiText:'駅', jp:'<ruby>駅<rt>えき</rt></ruby>', kana:'えき', id:'Stasiun', romaji:'eki' }]),
+          k('日', [{ kanjiText:'日', jp:'<ruby>日<rt>ひ</rt></ruby>', kana:'ひ', id:'Matahari', romaji:'hi' }])
+        ]
+      }
+    ]
+  },
+  {
+    id: 'paket_3',
+    number: '03',
+    title: 'Paket 3: 62 Kanji Lanjutan',
+    desc: '62 Kanji Dasar N5 & JFT A2 (No. 126–188) terbagi dalam 4 sub-kelompok tematik',
+    icon: 'layers', accent: 'accent-indigo',
+    groups: [
+      {
+        id: 'p3_g1', title: '1. Rutinitas, Waktu & Gerak', desc: '11 Kanji: 出かけます, 待ちます, 止まります, 食事, 仕事, 前, 後, 朝, dll. (No. 126–136)', page: 'No. 126–136', kategori: 'Kanji N5', icon: 'target', accent: 'accent-indigo',
+        cards: [
+          k('出かけます', [{ kanjiText:'出かけます', jp:'<ruby>出<rt>で</rt></ruby>かけます', kana:'でかけます', id:'Meninggalkan rumah', romaji:'dekakemasu' }]),
+          k('待ちます', [{ kanjiText:'待ちます', jp:'<ruby>待<rt>ま</rt></ruby>ちます', kana:'まちます', id:'Menunggu', romaji:'machimasu' }]),
+          k('止まります', [{ kanjiText:'止まります', jp:'<ruby>止<rt>と</rt></ruby>まります', kana:'とまります', id:'Berhenti', romaji:'tomarimasu' }]),
+          k('食事', [{ kanjiText:'食事', jp:'<ruby>食事<rt>しょくじ</rt></ruby>', kana:'しょくじ', id:'Makan bersama', romaji:'shokuji' }]),
+          k('仕事', [{ kanjiText:'仕事', jp:'<ruby>仕事<rt>しごと</rt></ruby>', kana:'しごと', id:'Pekerjaan', romaji:'shigoto' }]),
+          k('前', [{ kanjiText:'前', jp:'<ruby>前<rt>まえ</rt></ruby>', kana:'まえ', id:'Sebelum', romaji:'mae' }]),
+          k('後', [{ kanjiText:'後', jp:'<ruby>後<rt>あと</rt></ruby>', kana:'あと', id:'Setelah', romaji:'ato' }]),
+          k('朝', [{ kanjiText:'朝', jp:'<ruby>朝<rt>あさ</rt></ruby>', kana:'あさ', id:'Pagi', romaji:'asa' }]),
+          k('昼', [{ kanjiText:'昼', jp:'<ruby>昼<rt>ひる</rt></ruby>', kana:'ひる', id:'Siang', romaji:'hiru' }]),
+          k('夜', [{ kanjiText:'夜', jp:'<ruby>夜<rt>よる</rt></ruby>', kana:'よる', id:'Malam', romaji:'yoru' }]),
+          k('乗ります', [{ kanjiText:'乗ります', jp:'<ruby>乗<rt>の</rt></ruby>ります', kana:'のります', id:'Naik', romaji:'norimasu' }])
+        ]
+      },
+      {
+        id: 'p3_g2', title: '2. Sekolah, Pendidikan & Wisata', desc: '17 Kanji: 学校, 大学, 先生, 学生, 勉強, 文化, 音楽, 旅行, 友達, dll. (No. 137–153)', page: 'No. 137–153', kategori: 'Kanji N5', icon: 'book', accent: 'accent-sakura',
+        cards: [
+          k('学校', [{ kanjiText:'学校', jp:'<ruby>学校<rt>がっこう</rt></ruby>', kana:'がっこう', id:'Sekolahan', romaji:'gakkou' }]),
+          k('小学校', [{ kanjiText:'小学校', jp:'<ruby>小学校<rt>しょうがっこう</rt></ruby>', kana:'しょうがっこう', id:'SD', romaji:'shougakkou' }]),
+          k('中学校', [{ kanjiText:'中学校', jp:'<ruby>中学校<rt>ちゅうがっこう</rt></ruby>', kana:'ちゅうがっこう', id:'SMP', romaji:'chuugakkou' }]),
+          k('高校', [{ kanjiText:'高校', jp:'<ruby>高校<rt>こうこう</rt></ruby>', kana:'こうこう', id:'SMA', romaji:'koukou' }]),
+          k('大学', [{ kanjiText:'大学', jp:'<ruby>大学<rt>だいがく</rt></ruby>', kana:'だいがく', id:'Universitas', romaji:'daigaku' }]),
+          k('先生', [{ kanjiText:'先生', jp:'<ruby>先生<rt>せんせい</rt></ruby>', kana:'せんせい', id:'Guru', romaji:'sensei' }]),
+          k('学生', [{ kanjiText:'学生', jp:'<ruby>学生<rt>がくせい</rt></ruby>', kana:'がくせい', id:'Murid, siswa', romaji:'gakusei' }]),
+          k('～年生', [{ kanjiText:'～年生', jp:'～<ruby>年生<rt>ねんせい</rt></ruby>', kana:'～ねんせい', id:'Kelas ~', romaji:'~nensei' }]),
+          k('勉強', [{ kanjiText:'勉強', jp:'<ruby>勉強<rt>べんきょう</rt></ruby>', kana:'べんきょう', id:'Pelajaran', romaji:'benkyou' }]),
+          k('文化', [{ kanjiText:'文化', jp:'<ruby>文化<rt>ぶんか</rt></ruby>', kana:'ぶんか', id:'Kebudayaan', romaji:'bunka' }]),
+          k('音楽', [{ kanjiText:'音楽', jp:'<ruby>音楽<rt>おんがく</rt></ruby>', kana:'おんがく', id:'Musik', romaji:'ongaku' }]),
+          k('旅行', [{ kanjiText:'旅行', jp:'<ruby>旅行<rt>りょこう</rt></ruby>', kana:'りょこう', id:'Wisata', romaji:'ryokou' }]),
+          k('留学', [{ kanjiText:'留学', jp:'<ruby>留学<rt>りゅうがく</rt></ruby>', kana:'りゅうがく', id:'Belajar di luar negri', romaji:'ryuugaku' }]),
+          k('友達', [{ kanjiText:'友達', jp:'<ruby>友達<rt>ともだち</rt></ruby>', kana:'ともだち', id:'Teman', romaji:'tomodachi' }]),
+          k('楽しい', [{ kanjiText:'楽しい', jp:'<ruby>楽<rt>たの</rt></ruby>しい', kana:'たのしい', id:'Gembira', romaji:'tanoshii' }]),
+          k('週', [{ kanjiText:'週', jp:'<ruby>週<rt>しゅう</rt></ruby>', kana:'しゅう', id:'Minggu', romaji:'shuu' }]),
+          k('～回', [{ kanjiText:'～回', jp:'～<ruby>回<rt>かい</rt></ruby>', kana:'～かい', id:'~kali', romaji:'~kai' }])
+        ]
+      },
+      {
+        id: 'p3_g3', title: '3. Kuliner, Masakan & Bahan', desc: '14 Kanji: 食べ物, 飲物, お茶, お酒, 作ります, 料理, 味, 野菜, dll. (No. 154–167)', page: 'No. 154–167', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-gold',
+        cards: [
+          k('食べ物', [{ kanjiText:'食べ物', jp:'<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>', kana:'たべもの', id:'Makanan', romaji:'tabemono' }]),
+          k('飲物', [{ kanjiText:'飲物', jp:'<ruby>飲物<rt>のみもの</rt></ruby>', kana:'のみもの', id:'Minuman', romaji:'nomimono' }]),
+          k('お茶', [{ kanjiText:'お茶', jp:'お<ruby>茶<rt>ちゃ</rt></ruby>', kana:'おちゃ', id:'Teh hijau', romaji:'ocha' }]),
+          k('お酒', [{ kanjiText:'お酒', jp:'お<ruby>酒<rt>さけ</rt></ruby>', kana:'おさけ', id:'Sake', romaji:'osake' }]),
+          k('作ります', [{ kanjiText:'作ります', jp:'<ruby>作<rt>つく</rt></ruby>ります', kana:'つくります', id:'Membuat', romaji:'tsukurimasu' }]),
+          k('持っていきます', [{ kanjiText:'持っていきます', jp:'<ruby>持<rt>も</rt></ruby>っていきます', kana:'もっていきます', id:'Membawa pergi', romaji:'motteikimasu' }]),
+          k('お願いします', [{ kanjiText:'お願いします', jp:'お<ruby>願<rt>ねが</rt></ruby>いします', kana:'おねがいします', id:'Tolong', romaji:'onegaishimasu' }]),
+          k('料理', [{ kanjiText:'料理', jp:'<ruby>料理<rt>りょうり</rt></ruby>', kana:'りょうり', id:'Masakan', romaji:'ryouri' }]),
+          k('味', [{ kanjiText:'味', jp:'<ruby>味<rt>あじ</rt></ruby>', kana:'あじ', id:'Rasa', romaji:'aji' }]),
+          k('色', [{ kanjiText:'色', jp:'<ruby>色<rt>いろ</rt></ruby>', kana:'いろ', id:'Warna', romaji:'iro' }]),
+          k('野菜', [{ kanjiText:'野菜', jp:'<ruby>野菜<rt>やさい</rt></ruby>', kana:'やさい', id:'Sayuran', romaji:'yasai' }]),
+          k('少し', [{ kanjiText:'少し', jp:'<ruby>少<rt>すこ</rt></ruby>し', kana:'すこし', id:'Sedikit', romaji:'sukoshi' }]),
+          k('中', [{ kanjiText:'中', jp:'<ruby>中<rt>なか</rt></ruby>', kana:'なか', id:'Dalam', romaji:'naka' }]),
+          k('入っています', [{ kanjiText:'入っています', jp:'<ruby>入<rt>はい</rt></ruby>っています', kana:'はいっています', id:'Masuk', romaji:'haitteimasu' }])
+        ]
+      },
+      {
+        id: 'p3_g4', title: '4. Kantor, Transportasi & Anggota Tubuh', desc: '20 Kanji: 本社, 支社, 出張, 空港, 電話, 電車, 車, 体, 頭, 目, 口, dll. (No. 169–188)', page: 'No. 169–188', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-indigo',
+        cards: [
+          k('本社', [{ kanjiText:'本社', jp:'<ruby>本社<rt>ほんしゃ</rt></ruby>', kana:'ほんしゃ', id:'Kantor pusat', romaji:'honsha' }]),
+          k('支社', [{ kanjiText:'支社', jp:'<ruby>支社<rt>ししゃ</rt></ruby>', kana:'ししゃ', id:'Kantor cabang', romaji:'shisha' }]),
+          k('出張', [{ kanjiText:'出張', jp:'<ruby>出張<rt>しゅっちょう</rt></ruby>', kana:'しゅっちょう', id:'Dinas luar kota', romaji:'shucchou' }]),
+          k('空港', [{ kanjiText:'空港', jp:'<ruby>空港<rt>くうこう</rt></ruby>', kana:'くうこう', id:'Bandara', romaji:'kuukou' }]),
+          k('出発', [{ kanjiText:'出発', jp:'<ruby>出発<rt>しゅっぱつ</rt></ruby>', kana:'しゅっぱつ', id:'Keberangkatan', romaji:'shuppatsu' }]),
+          k('到着', [{ kanjiText:'到着', jp:'<ruby>到着<rt>とうちゃく</rt></ruby>', kana:'とうちゃく', id:'Kedatangan', romaji:'touchaku' }]),
+          k('午前', [{ kanjiText:'午前', jp:'<ruby>午前<rt>ごぜん</rt></ruby>', kana:'ごぜん', id:'AM', romaji:'gozen' }]),
+          k('午後', [{ kanjiText:'午後', jp:'<ruby>午後<rt>ごご</rt></ruby>', kana:'ごご', id:'PM', romaji:'gogo' }]),
+          k('自分', [{ kanjiText:'自分', jp:'<ruby>自分<rt>じぶん</rt></ruby>', kana:'じぶん', id:'Sendiri', romaji:'jibun' }]),
+          k('電話', [{ kanjiText:'電話', jp:'<ruby>電話<rt>でんわ</rt></ruby>', kana:'でんわ', id:'Telepon', romaji:'denwa' }]),
+          k('電気', [{ kanjiText:'電気', jp:'<ruby>電気<rt>でんき</rt></ruby>', kana:'でんき', id:'Listrik', romaji:'denki' }]),
+          k('電車', [{ kanjiText:'電車', jp:'<ruby>電車<rt>でんしゃ</rt></ruby>', kana:'でんしゃ', id:'Kereta', romaji:'densha' }]),
+          k('車', [{ kanjiText:'車', jp:'<ruby>車<rt>くるま</rt></ruby>', kana:'くるま', id:'Mobil', romaji:'kuruma' }]),
+          k('送ります', [{ kanjiText:'送ります', jp:'<ruby>送<rt>おく</rt></ruby>ります', kana:'おくります', id:'Mengirim', romaji:'okurimasu' }]),
+          k('使います', [{ kanjiText:'使います', jp:'<ruby>使<rt>つか</rt></ruby>います', kana:'つかいます', id:'Menggunakan', romaji:'tsukaimasu' }]),
+          k('借ります', [{ kanjiText:'借ります', jp:'<ruby>借<rt>か</rt></ruby>ります', kana:'かります', id:'Meminjam', romaji:'karimasu' }]),
+          k('体', [{ kanjiText:'体', jp:'<ruby>体<rt>からだ</rt></ruby>', kana:'からだ', id:'Badan', romaji:'karada' }]),
+          k('頭', [{ kanjiText:'頭', jp:'<ruby>頭<rt>あたま</rt></ruby>', kana:'あたま', id:'Kepala', romaji:'atama' }]),
+          k('目', [{ kanjiText:'目', jp:'<ruby>目<rt>め</rt></ruby>', kana:'め', id:'Mata', romaji:'me' }]),
+          k('口', [{ kanjiText:'口', jp:'<ruby>口<rt>くち</rt></ruby>', kana:'くち', id:'Mulut', romaji:'kuchi' }])
+        ]
+      }
+    ]
+  }
+];
+
+/* ============================================================
+   STORAGE & STATE ENGINE
+   ============================================================ */
+const STORE = { 
+  theme:'waFlashcards.theme', 
+  learned:'waFlashcards.learnedIds_n5_186kanji_v1', 
+  excluded:'waFlashcards.excludedIds_n5_186kanji_v1', 
+  streak:'waFlashcards.streakCount', 
+  lastVisit:'waFlashcards.lastVisit',
+  reverseMode:'waFlashcards.reverseMode',
+  autoTTS:'waFlashcards.autoTTS',
+  typeHistory:'waFlashcards.typeQuizHistory_v2',
+  speedrunSeconds:'waFlashcards.speedrunSeconds_v2'
+};
+function safeGet(k, fb){ try{ const r = localStorage.getItem(k); return r === null ? fb : JSON.parse(r); }catch(e){ return fb; } }
+function safeSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+let rawLearned = safeGet(STORE.learned, []);
+let learnedSet = new Set(Array.isArray(rawLearned) ? rawLearned : []);
+function saveLearned(){ safeSet(STORE.learned, Array.from(learnedSet)); }
+
+let rawExcluded = safeGet(STORE.excluded, []);
+let excludedSet = new Set(Array.isArray(rawExcluded) ? rawExcluded : []);
+function saveExcluded(){ safeSet(STORE.excluded, Array.from(excludedSet)); }
+
+function cardUid(gid, idx){ return gid + '#' + idx; }
+
+function totalCardsInGroup(g){ return g.cards.length; }
+function learnedCountInGroup(g){ return g.cards.reduce((n,_,i)=> n + (learnedSet.has(cardUid(g.id,i)) ? 1 : 0), 0); }
+function totalCardsInChapter(c){ return c.groups.reduce((s,g)=> s + totalCardsInGroup(g), 0); }
+function learnedCountInChapter(c){ return c.groups.reduce((s,g)=> s + learnedCountInGroup(g), 0); }
+function totalCardsAll(){ return CHAPTERS.reduce((s,c)=> s + totalCardsInChapter(c), 0); }
+function learnedCountAll(){ return CHAPTERS.reduce((s,c)=> s + learnedCountInChapter(c), 0); }
+
+function speakKana(htmlStr){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlStr;
+    const rts = temp.querySelectorAll('rt');
+    rts.forEach(r => r.remove());
+    const cleanText = temp.textContent.replace(/\[.*?\]/g, '').replace(/［.*?］/g, '').replace(/[\(\)]/g, '').trim();
+    const ut = new SpeechSynthesisUtterance(cleanText);
+    ut.lang = 'ja-JP';
+    ut.rate = 0.85;
+    window.speechSynthesis.speak(ut);
+  }
+}
+/* ============================================================
+   QUIZ SYSTEM (MC, MATCH & ESSAY TYPE)
+   ============================================================ */
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function formatSec(s){
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return `${m < 10 ? '0' : ''}${m}:${rem < 10 ? '0' : ''}${rem}`;
+}
+
+function collectPool(chapterIds){
+  let pool = [];
+  chapterIds.forEach(cid => {
+    const chap = CHAPTERS.find(c => c.id === cid);
+    if (!chap) return;
+    chap.groups.forEach(g => {
+      g.cards.forEach((card, cIdx) => {
+        card.words.forEach((w, wIdx) => {
+          pool.push({
+            card: { 
+              type: 'kanji_item', 
+              kanji: w.kanjiText || card.kanji, 
+              kana: w.kana, 
+              arti: w.id, 
+              romaji: w.romaji, 
+              parentKanji: card.kanji 
+            },
+            groupId: g.id,
+            chapterId: cid,
+            uniqueId: `${g.id}_${card.kanji}_${wIdx}`
+          });
+        });
+      });
+    });
+  });
+  return pool;
+}
+
+function collectPoolGroup(groupId){
+  let pool = [];
+  CHAPTERS.forEach(c => {
+    const g = c.groups.find(gr => gr.id === groupId);
+    if(!g) return;
+    g.cards.forEach((card, cIdx) => {
+      card.words.forEach((w, wIdx) => {
+        pool.push({
+          card: { 
+            type: 'kanji_item', 
+            kanji: w.kanjiText || card.kanji, 
+            kana: w.kana, 
+            arti: w.id, 
+            romaji: w.romaji, 
+            parentKanji: card.kanji 
+          },
+          groupId: g.id,
+          chapterId: c.id,
+          uniqueId: `${g.id}_${card.kanji}_${wIdx}`
+        });
+      });
+    });
+  });
+  return pool;
+}
+
+function pickDistractors(pool, target, count){
+  const same = pool.filter(p => p.uniqueId !== target.uniqueId && p.card.kana !== target.card.kana);
+  let cand = shuffleArray(same).slice(0, count);
+  return cand;
+}
+
+/* ============ HIERARKI KELOMPOK BESAR & SUB-KELOMPOK ============ */
+const BIG_GROUPS = [
+  {
+    id: 'paket_1',
+    title: 'Paket 1: 62 Kanji Dasar',
+    desc: '62 Kosakata kanji dasar N5 (No. 1–62) dalam 6 sub-kelompok',
+    icon: 'hanko',
+    accent: 'accent-gold',
+    allScope: 'paket_1_all',
+    subScopes: ['p1_g1', 'p1_g2', 'p1_g3', 'p1_g4', 'p1_g5', 'p1_g6']
+  },
+  {
+    id: 'paket_2',
+    title: 'Paket 2: 62 Kanji Lanjutan',
+    desc: '62 Kosakata kanji N5 & JFT A2 (No. 63–125) dalam 4 sub-kelompok',
+    icon: 'target',
+    accent: 'accent-sakura',
+    allScope: 'paket_2_all',
+    subScopes: ['p2_g1', 'p2_g2', 'p2_g3', 'p2_g4']
+  },
+  {
+    id: 'paket_3',
+    title: 'Paket 3: 62 Kanji Lanjutan',
+    desc: '62 Kosakata kanji N5 & JFT A2 (No. 126–188) dalam 4 sub-kelompok',
+    icon: 'layers',
+    accent: 'accent-indigo',
+    allScope: 'paket_3_all',
+    subScopes: ['p3_g1', 'p3_g2', 'p3_g3', 'p3_g4']
+  }
+];
+
+const SCOPES = {
+  all_big: { 
+    get label() { return `Semua Kelompok Besar (${this.build().length} Kanji)`; }, 
+    get desc() { return `Uji gabungan seluruh paket kanji yang tersedia (Paket 1, 2 & 3)`; }, 
+    icon: 'trophy', 
+    accent: 'accent-gold', 
+    build: () => collectPool(['paket_1', 'paket_2', 'paket_3']) 
+  },
+  paket_1_all: { 
+    get label() { return `Semua 62 Kanji di Paket 1 (${this.build().length})`; }, 
+    get desc() { return `Gabungan lengkap 6 sub-kelompok Paket 1 (No. 1–62)`; }, 
+    icon: 'hanko', 
+    accent: 'accent-gold', 
+    build: () => collectPool(['paket_1']) 
+  },
+  p1_g1: { 
+    label: '1. Makanan, Minuman & Sifat Dasar', 
+    desc: '10 Kanji kebutuhan konsumsi & sifat (No. 1–10)', 
+    icon: 'hanko', 
+    accent: 'accent-gold', 
+    build: () => collectPoolGroup('p1_g1') 
+  },
+  p1_g2: { 
+    label: '2. Waktu, Jam & Nama Hari', 
+    desc: '10 Kanji jam, menit, & nama hari (No. 11–20)', 
+    icon: 'target', 
+    accent: 'accent-sakura', 
+    build: () => collectPoolGroup('p1_g2') 
+  },
+  p1_g3: { 
+    label: '3. Komunikasi & Panca Indra', 
+    desc: '6 Kanji kata kerja komunikasi (No. 21–26)', 
+    icon: 'layers', 
+    accent: 'accent-indigo', 
+    build: () => collectPoolGroup('p1_g3') 
+  },
+  p1_g4: { 
+    label: '4. Angka 1–10 & Satuan Kalender', 
+    desc: '13 Kanji angka 1–10, tahun, bulan, tanggal (No. 27–39)', 
+    icon: 'hanko', 
+    accent: 'accent-gold', 
+    build: () => collectPoolGroup('p1_g4') 
+  },
+  p1_g5: { 
+    label: '5. Arah Mata Angin & Pintu Stasiun', 
+    desc: '9 Kanji mata angin & pintu stasiun (No. 40–48)', 
+    icon: 'layers', 
+    accent: 'accent-sakura', 
+    build: () => collectPoolGroup('p1_g5') 
+  },
+  p1_g6: { 
+    label: '6. Belanja, Uang & Aksi Mobilitas', 
+    desc: '13 Kanji uang, belanja & pergi/datang (No. 49–62)', 
+    icon: 'target', 
+    accent: 'accent-indigo', 
+    build: () => collectPoolGroup('p1_g6') 
+  },
+  paket_2_all: { 
+    get label() { return `Semua 62 Kanji di Paket 2 (${this.build().length})`; }, 
+    get desc() { return `Gabungan lengkap 4 sub-kelompok Paket 2 (No. 63–125)`; }, 
+    icon: 'target', 
+    accent: 'accent-sakura', 
+    build: () => collectPool(['paket_2']) 
+  },
+  p2_g1: { 
+    label: '1. Identitas, Keluarga & Bahasa', 
+    desc: '20 Kanji orang, negara, dan bahasa (No. 63–82)', 
+    icon: 'hanko', 
+    accent: 'accent-sakura', 
+    build: () => collectPoolGroup('p2_g1') 
+  },
+  p2_g2: { 
+    label: '2. Minat, Musim & Alam', 
+    desc: '13 Kanji musim, hobi, dan elemen alam (No. 83–95)', 
+    icon: 'book', 
+    accent: 'accent-gold', 
+    build: () => collectPoolGroup('p2_g2') 
+  },
+  p2_g3: { 
+    label: '3. Cuaca & Lingkungan Kota', 
+    desc: '11 Kanji cuaca, langit, dan toko/kota (No. 96–106)', 
+    icon: 'layers', 
+    accent: 'accent-indigo', 
+    build: () => collectPoolGroup('p2_g3') 
+  },
+  p2_g4: { 
+    label: '4. Sifat, Posisi, Warna & Lokasi', 
+    desc: '18 Kanji sifat, warna, arah, dan stasiun (No. 107–125)', 
+    icon: 'scale', 
+    accent: 'accent-sakura', 
+    build: () => collectPoolGroup('p2_g4') 
+  },
+  paket_3_all: { 
+    get label() { return `Semua 62 Kanji di Paket 3 (${this.build().length})`; }, 
+    get desc() { return `Gabungan lengkap 4 sub-kelompok Paket 3 (No. 126–188)`; }, 
+    icon: 'layers', 
+    accent: 'accent-indigo', 
+    build: () => collectPool(['paket_3']) 
+  },
+  p3_g1: { 
+    label: '1. Rutinitas, Waktu & Gerak', 
+    desc: '11 Kanji aktivitas harian, waktu, dan kendaraan (No. 126–136)', 
+    icon: 'target', 
+    accent: 'accent-indigo', 
+    build: () => collectPoolGroup('p3_g1') 
+  },
+  p3_g2: { 
+    label: '2. Sekolah, Pendidikan & Wisata', 
+    desc: '17 Kanji jenjang sekolah, pelajaran, dan rekreasi (No. 137–153)', 
+    icon: 'book', 
+    accent: 'accent-sakura', 
+    build: () => collectPoolGroup('p3_g2') 
+  },
+  p3_g3: { 
+    label: '3. Kuliner, Masakan & Bahan', 
+    desc: '14 Kanji santapan, minuman, rasa, dan sayur (No. 154–167)', 
+    icon: 'hanko', 
+    accent: 'accent-gold', 
+    build: () => collectPoolGroup('p3_g3') 
+  },
+  p3_g4: { 
+    label: '4. Kantor, Transportasi & Anggota Tubuh', 
+    desc: '20 Kanji kantor, kendaraan, dan anatomi fisik (No. 169–188)', 
+    icon: 'layers', 
+    accent: 'accent-indigo', 
+    build: () => collectPoolGroup('p3_g4') 
+  }
+};
+
+/* MC Quiz Builder */
+function buildMCQuestions(scopeKey){
+  const pool = SCOPES[scopeKey].build();
+  let qs = [];
+
+  pool.forEach(item => {
+    const distractors = pickDistractors(pool, item, 3);
+    const options = shuffleArray([item, ...distractors]).map(o => {
+      return { 
+        text: o.card.kana, 
+        sub: o.card.arti, 
+        correct: o.uniqueId === item.uniqueId 
+      };
+    });
+    qs.push({
+      item, options,
+      promptMain: item.card.kanji,
+      promptSub: 'Pilih cara baca (Hiragana) & arti yang tepat'
+    });
+  });
+  return shuffleArray(qs);
+}
+
+/* Matching Quiz Builder */
+function buildMatchingRounds(scopeKey, roundSize){
+  const pool = shuffleArray(SCOPES[scopeKey].build());
+  const rounds = [];
+  for(let i=0; i<pool.length; i+=roundSize) rounds.push(pool.slice(i, i+roundSize));
+  return rounds;
+}
+
+/* Normalizer Jawaban Ketik Manual */
+function extractAcceptedAnswers(card){
+  const accepted = new Set();
+  function addVariants(str){
+    if(!str) return;
+    const s = str.trim().toLowerCase();
+    accepted.add(s);
+    const noBrackets = s.replace(/\[.*?\]/g, '').replace(/［.*?］/g, '').replace(/（.*?）/g, '').replace(/\(.*?\)/g, '').trim();
+    if(noBrackets) accepted.add(noBrackets);
+    const insideBrackets = s.replace(/[\[\]\(\)（）［］]/g, '').trim();
+    if(insideBrackets) accepted.add(insideBrackets);
+    s.split(/[\/／,、]/).forEach(part => {
+      const p = part.trim();
+      if(p){
+        accepted.add(p);
+        accepted.add(p.replace(/[\[\]\(\)（）［］]/g, '').trim());
+      }
+    });
+  }
+
+  if(card.kana) addVariants(card.kana);
+  if(card.romaji) addVariants(card.romaji);
+
+  const cleanList = [];
+  accepted.forEach(val => {
+    if(!val) return;
+    const norm = val.toLowerCase().replace(/[\s\.\,\!\?～~・\-—\[\]\(\)（）［］]/g, '');
+    if(norm) cleanList.push(norm);
+  });
+  return Array.from(new Set(cleanList));
+}
+
+function checkTypeAnswer(userInput, card){
+  if(!userInput || !userInput.trim()) return false;
+  const cleanUser = userInput.toLowerCase().replace(/[\s\.\,\!\?～~・\-—\[\]\(\)（）［］]/g, '');
+  const accepted = extractAcceptedAnswers(card);
+  return accepted.includes(cleanUser);
+}
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+const state = { 
+  screen: 'home', 
+  chapterId: null, 
+  groupId: null, 
+  cardIndex: 0, 
+  order: null, 
+  shuffled: false, 
+  quiz: null, 
+  pendingScope: null,
+  pendingBigGroup: null,
+  typeSelectionPool: [],
+  selectedTypeUids: new Set(),
+  isSpeedrun: false,
+  speedrunSec: safeGet(STORE.speedrunSeconds, 10),
+  questionTimer: null,
+  questionTimeLeft: 10,
+  totalTimer: null,
+  totalElapsedSec: 0,
+  reverseMode: safeGet(STORE.reverseMode, false),
+  autoTTS: safeGet(STORE.autoTTS, false)
+};
+const screenEl = document.getElementById('screen');
+
+function playCurrentCardTTS(){
+  if(!state.autoTTS) return;
+  const chap = CHAPTERS.find(c => c.id === state.chapterId);
+  if (!chap) return;
+  const g = chap.groups.find(gr => gr.id === state.groupId);
+  if (!g || !state.order) return;
+  const card = g.cards[state.order[state.cardIndex]];
+  if (card && card.words) {
+    speakKana(card.words.map(w => w.jp).join('、'));
+  }
+}
+
+function stopAllQuizTimers(){
+  if(state.questionTimer){ clearInterval(state.questionTimer); state.questionTimer = null; }
+  if(state.totalTimer){ clearInterval(state.totalTimer); state.totalTimer = null; }
+}
+
+function startTotalTimer(){
+  state.totalElapsedSec = 0;
+  if(state.totalTimer) clearInterval(state.totalTimer);
+  state.totalTimer = setInterval(() => {
+    state.totalElapsedSec++;
+    const el = document.getElementById('quizTotalTimer');
+    if(el) el.textContent = formatSec(state.totalElapsedSec);
+  }, 1000);
+}
+
+function resetQuestionTimer(){
+  if(state.questionTimer) clearInterval(state.questionTimer);
+  if(!state.quiz || !state.quiz.isSpeedrun) return;
+  state.questionTimeLeft = state.quiz.speedrunSec;
+  updateQuestionTimerDisplay();
+  state.questionTimer = setInterval(() => {
+    state.questionTimeLeft--;
+    updateQuestionTimerDisplay();
+    if(state.questionTimeLeft <= 0){
+      clearInterval(state.questionTimer);
+      state.questionTimer = null;
+      handleTypeTimeOut();
+    }
+  }, 1000);
+}
+
+function updateQuestionTimerDisplay(){
+  const el = document.getElementById('speedrunCountdown');
+  if(!el) return;
+  el.textContent = `${state.questionTimeLeft}s`;
+  if(state.questionTimeLeft <= 3){
+    el.classList.add('urgent');
+  } else {
+    el.classList.remove('urgent');
+  }
+}
+
+function handleTypeTimeOut(){
+  const q = state.quiz;
+  if(!q || q.mode !== 'type' || q.answered) return;
+  const input = document.getElementById('typeAnswerInput');
+  const val = input ? input.value.trim() : '';
+  q.userInput = val || '(Waktu Habis)';
+  const question = q.questions[q.index];
+  const isRight = checkTypeAnswer(val, question.item.card);
+  q.isCorrect = isRight;
+  if(isRight){
+    q.correct++;
+    speakKana(question.item.card.kana);
+  } else {
+    q.wrong++;
+  }
+  q.answered = true;
+  renderQuizType();
+}
+
+function saveTypeHistoryEntry(q){
+  let hist = safeGet(STORE.typeHistory, []);
+  const entry = {
+    id: Date.now(),
+    scopeKey: q.scopeKey,
+    count: q.questions.length,
+    uids: Array.from(state.selectedTypeUids),
+    durationSec: state.totalElapsedSec,
+    speedrun: q.isSpeedrun,
+    speedrunSec: q.speedrunSec,
+    dateStr: new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'short' }) + ' ' + new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' })
+  };
+  hist.unshift(entry);
+  if(hist.length > 8) hist = hist.slice(0, 8);
+  safeSet(STORE.typeHistory, hist);
+}
+
+function goHome(){ stopAllQuizTimers(); state.screen = 'home'; state.chapterId = null; state.groupId = null; render(); }
+function goChapter(cid){ state.screen = 'chapter'; state.chapterId = cid; state.groupId = null; render(); }
+function goDeck(cid, gid){
+  state.screen = 'deck'; state.chapterId = cid; state.groupId = gid; state.cardIndex = 0; state.shuffled = false;
+  const chap = CHAPTERS.find(c => c.id === cid);
+  if (chap) {
+    const g = chap.groups.find(gr => gr.id === gid);
+    if (g) state.order = g.cards.map((_,i)=>i);
+  }
+  render();
+  playCurrentCardTTS();
+}
+function goTestHub(){ stopAllQuizTimers(); state.screen = 'test-hub'; render(); }
+function goTestSubHub(bigGroupId){ state.screen = 'test-subhub'; state.pendingBigGroup = bigGroupId; render(); }
+function goQuizMode(sKey){ state.screen = 'quiz-mode'; state.pendingScope = sKey; render(); }
+
+function openTypeSelect(sKey){
+  state.screen = 'type-select';
+  state.pendingScope = sKey;
+  const pool = SCOPES[sKey].build();
+  state.typeSelectionPool = pool;
+  state.selectedTypeUids = new Set(pool.map(item => item.uniqueId));
+  render();
+}
+
+function startCustomTypeQuiz(){
+  if(state.selectedTypeUids.size === 0) return;
+  const filteredPool = state.typeSelectionPool.filter(item => state.selectedTypeUids.has(item.uniqueId));
+  const questions = filteredPool.map(item => {
+    return {
+      item,
+      promptMain: item.card.kanji,
+      promptSub: `Artinya: "${item.card.arti}" — Ketik cara baca Hiragana atau Romaji:`
+    };
+  });
+
+  state.quiz = {
+    mode: 'type',
+    scopeKey: state.pendingScope,
+    questions: shuffleArray(questions),
+    index: 0,
+    correct: 0,
+    wrong: 0,
+    answered: false,
+    userInput: '',
+    isCorrect: false,
+    isSpeedrun: state.isSpeedrun,
+    speedrunSec: state.speedrunSec
+  };
+  state.screen = 'quiz-play';
+  render();
+  startTotalTimer();
+  resetQuestionTimer();
+}
+
+function startMCQuiz(sKey){
+  state.quiz = { 
+    mode:'mc', 
+    scopeKey:sKey, 
+    questions:buildMCQuestions(sKey), 
+    index:0, 
+    correct:0, 
+    wrong:0, 
+    answered:false,
+    isSpeedrun:false 
+  };
+  state.screen = 'quiz-play';
+  render();
+  startTotalTimer();
+}
+
+function startMatchQuiz(sKey){
+  const rounds = buildMatchingRounds(sKey, 5);
+  state.quiz = { 
+    mode:'match', 
+    scopeKey:sKey, 
+    rounds, 
+    roundIndex:0, 
+    leftOrder:null, 
+    rightOrder:null, 
+    matched:new Set(), 
+    selected:null, 
+    mistakes:0, 
+    roundsCleared:0,
+    isSpeedrun:false 
+  };
+  setupMatchRound();
+  state.screen = 'quiz-play';
+  render();
+  startTotalTimer();
+}
+
+function exitQuiz(){
+  if(state.quiz && !state.quiz.finished){
+    if(!confirm('Yakin ingin mengakhiri latihan? Skor & progres stopwatch belum disimpan.')) return;
+  }
+  stopAllQuizTimers();
+  state.quiz = null;
+  state.screen = 'test-hub';
+  render();
+}
+
+/* ============================================================
+   RENDER: HOME
+   ============================================================ */
+function renderHome(){
+  const streak = safeGet(STORE.streak, 1);
+  const learned = learnedCountAll();
+  const total = totalCardsAll();
+
+  let chapHtml = '';
+  CHAPTERS.forEach(c => {
+    const t = totalCardsInChapter(c);
+    const l = learnedCountInChapter(c);
+    const pct = t ? Math.round((l/t)*100) : 0;
+    chapHtml += `
+      <button class="bento bab-tile ${c.accent}" data-open-chapter="${c.id}">
+        <span class="glow"></span>
+        <span class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(c.icon)}</svg></span>
+        <span class="eyebrow">${c.number ? 'PAKET ' + c.number + ' · KANJI N5' : 'KANJI N5'}</span>
+        <div class="bab-title">${c.title}</div>
+        <div class="bab-desc">${c.desc}</div>
+        <div class="bab-meta">
+          <div><div class="meta-num">${c.groups.length}</div><div class="meta-label">Kelompok</div></div>
+          <div><div class="meta-num">${t}</div><div class="meta-label">Total Kartu</div></div>
+          <div><div class="meta-num">${pct}%</div><div class="meta-label">Dipelajari</div></div>
+        </div>
+        <div class="bab-progress">
+          <div class="progress-bar"><span style="width:${pct}%"></span></div>
+        </div>
+      </button>`;
+  });
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="bento-grid">
+        <div class="bento stat-tile">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('flame')}</svg></div>
+          <div class="num">${streak}<span class="unit">hari</span></div>
+          <div class="cap">Hari Beruntun Belajar</div>
+        </div>
+        <div class="bento stat-tile learned">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('target')}</svg></div>
+          <div class="num">${learned}<span class="unit">/ ${total}</span></div>
+          <div class="cap">Kartu Dipelajari</div>
+        </div>
+      </div>
+
+      <div class="section-label">Pilih Paket Belajar</div>
+      ${chapHtml}
+
+      <div class="section-label">Latihan &amp; Speedrun Kanji</div>
+      <button class="bento bab-tile test-cta" id="openTestHub">
+        <span class="glow"></span>
+        <span class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('clipboard')}</svg></span>
+        <span class="eyebrow">UJI HAFALAN KANJI</span>
+        <div class="bab-title">Mulai Latihan Mandiri</div>
+        <div class="bab-desc">Pilihan ganda, pasangan kata, &amp; esai ketik manual dengan filter kustom per kanji, stopwatch &amp; mode speedrun.</div>
+        <div class="bab-meta">
+          <div><div class="meta-num">${BIG_GROUPS.length + 1}</div><div class="meta-label">Kelompok Besar</div></div>
+          <div><div class="meta-num">3</div><div class="meta-label">Metode Kuis</div></div>
+          <div><div class="meta-num"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:13px;height:13px;stroke:var(--accent-gold);vertical-align:-1px;">${icon('zap')}</svg></div><div class="meta-label">Speedrun</div></div>
+        </div>
+      </button>
+
+      <button class="reset-link" id="resetProgress" type="button">Setel ulang progres belajar</button>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: CHAPTER (SUB-KELOMPOK)
+   ============================================================ */
+function renderChapter(cid){
+  const chap = CHAPTERS.find(c => c.id === cid);
+  if (!chap) { goHome(); return; }
+
+  let rows = '';
+  chap.groups.forEach(g => {
+    const l = learnedCountInGroup(g);
+    const t = totalCardsInGroup(g);
+    const done = l === t && t > 0;
+    rows += `
+      <button class="group-row ${g.accent}" data-open-deck="${g.id}">
+        <span class="g-icon ${g.accent}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(g.icon)}</svg></span>
+        <span class="g-body">
+          <span class="g-title">${g.title}</span>
+          <span class="g-desc">${g.desc}</span>
+          <span class="g-tags">
+            <span class="g-tag page-tag">${g.page}</span>
+            <span class="g-tag">${t} kartu</span>
+            <span class="g-tag ${done ? 'done' : ''}">${l}/${t} dipelajari</span>
+          </span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>`;
+  });
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backHome"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">${chap.title}</span>
+          <span class="crumb-title">Pilih Sub-Kelompok</span>
+        </div>
+      </div>
+      <div class="section-label">Sub-Kelompok Tematik</div>
+      ${rows}
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: DECK (FLASHCARD)
+   ============================================================ */
+function renderCardFace(card, kat, pageStr){
+  const wordsHtml = card.words.map(w => `
+    <div class="kanji-word-item">
+      <span class="kanji-word-jp font-kanji" lang="ja">${w.jp}</span>
+      <span class="kanji-word-id">${w.id}</span>
+    </div>
+  `).join('');
+
+  const wordsMeaningStr = card.words.map(w => w.id).join(' / ');
+
+  if(state.reverseMode){
+    const front = `
+      <div class="face-top">
+        <div class="face-top-left"><span class="badge sakura">Arti Kanji · ${pageStr}</span><span class="learned-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span></div>
+        <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
+      </div>
+      <div class="face-mid" style="text-align:center;">
+        <span class="arti-label">Makna / Bahasa Indonesia</span>
+        <span class="arti-text" style="font-size:16px;margin-top:4px;">${wordsMeaningStr}</span>
+      </div>
+      <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk melihat kanji &amp; cara baca</span></div>`;
+
+    const back = `
+      <div class="face-top">
+        <span class="badge blue">Kanji <span class="font-kanji" lang="ja">${card.kanji}</span> · ${pageStr}</span>
+        <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
+      </div>
+      <div class="face-mid" style="text-align:left;padding:0 2px;width:100%;">
+        <div class="kanji-word-list">${wordsHtml}</div>
+      </div>
+      <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk kembali</span></div>`;
+    return { front, back };
+  }
+
+  const front = `
+    <div class="face-top">
+      <div class="face-top-left"><span class="badge sakura">Kanji N5 · ${pageStr}</span><span class="learned-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span></div>
+      <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
+    </div>
+    <div class="face-mid"><span class="kanji-display font-kanji" lang="ja">${card.kanji}</span></div>
+    <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk melihat cara baca &amp; arti</span></div>`;
+
+  const back = `
+    <div class="face-top">
+      <span class="badge blue">Kanji <span class="font-kanji" lang="ja">${card.kanji}</span> · ${pageStr}</span>
+      <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
+    </div>
+    <div class="face-mid" style="text-align:left;padding:0 2px;width:100%;">
+      <div class="kanji-word-list">${wordsHtml}</div>
+    </div>
+    <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk kembali</span></div>`;
+  return { front, back };
+}
+
+function renderDeck(cid, gid){
+  const chap = CHAPTERS.find(c => c.id === cid);
+  if (!chap) { goHome(); return; }
+  const g = chap.groups.find(gr => gr.id === gid);
+  if (!g) { goChapter(cid); return; }
+
+  if(!state.order || state.order.length === 0) state.order = g.cards.map((_,i)=>i);
+  if (state.cardIndex >= state.order.length) state.cardIndex = 0;
+
+  const idx = state.cardIndex;
+  const actualIdx = state.order[idx];
+  const card = g.cards[actualIdx];
+  if (!card) { state.cardIndex = 0; render(); return; }
+
+  const uid = cardUid(g.id, actualIdx);
+  const isLearned = learnedSet.has(uid);
+  const isExcluded = excludedSet.has(uid);
+  const learnedCount = learnedCountInGroup(g);
+  const total = state.order.length;
+  const faces = renderCardFace(card, g.kategori, g.page);
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backChapter"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">${chap.title}</span>
+          <span class="crumb-title">${g.title}</span>
+        </div>
+      </div>
+
+      <div class="bento meta-bar">
+        <div class="meta-left">
+          <span class="meta-cat">${g.kategori} · ${g.title}</span>
+          <span class="meta-page">${g.page}</span>
+        </div>
+        <div class="meta-right">
+          <span class="meta-count">${learnedCount} / ${g.cards.length} dipelajari</span>
+          <div class="progress-bar"><span style="width:${g.cards.length ? (learnedCount/g.cards.length)*100 : 0}%"></span></div>
+        </div>
+      </div>
+
+      <div class="flashcard ${isLearned ? 'is-learned' : ''} ${isExcluded ? 'is-excluded' : ''}" id="activeCard">
+        <button class="exclude-btn ${isExcluded ? 'is-excluded' : ''}" id="excludeCard" title="Tandai dihafal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(isExcluded ? 'check' : 'archive')}</svg>
+        </button>
+        <div class="flashcard-inner">
+          <div class="face front">${faces.front}</div>
+          <div class="face back">${faces.back}</div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-btn" id="prevCard" ${idx===0?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg>Sebelumnya</button>
+        <button class="shuffle-btn ${state.shuffled ? 'is-active' : ''}" id="shuffleDeck" title="Acak kartu"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('shuffle')}</svg></button>
+        <button class="nav-btn primary" id="nextCard" ${idx===total-1?'disabled':''}>Selanjutnya<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></button>
+      </div>
+      <div class="deck-count">KARTU ${idx+1} DARI ${total}${state.shuffled ? ' · TERACAK' : ''}</div>
+
+      <!-- SAKLAR KONTROL -->
+      <div class="deck-controls">
+        <div class="control-toggle-card">
+          <div class="control-label">
+            <span class="control-icon sakura"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('swap')}</svg></span>
+            <div class="control-text">
+              <div class="control-title">Balik Kartu (Indonesia → Kanji)</div>
+              <div class="control-sub">Tampilkan arti bahasa Indonesia di depan</div>
+            </div>
+          </div>
+          <button class="switch-btn ${state.reverseMode ? 'is-active' : ''}" id="toggleReverse" role="switch" aria-checked="${state.reverseMode}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+
+        <div class="control-toggle-card">
+          <div class="control-label">
+            <span class="control-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('speaker')}</svg></span>
+            <div class="control-text">
+              <div class="control-title">Audio Otomatis (Auto TTS)</div>
+              <div class="control-sub">Otomatis putar suara saat berpindah kartu</div>
+            </div>
+          </div>
+          <button class="switch-btn ${state.autoTTS ? 'is-active' : ''}" id="toggleAutoTTS" role="switch" aria-checked="${state.autoTTS}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: TEST HUB (HIERARKI KELOMPOK BESAR)
+   ============================================================ */
+function renderTestHub(){
+  let bigRows = '';
+  BIG_GROUPS.forEach(bg => {
+    const total = SCOPES[bg.allScope].build().length;
+    bigRows += `
+      <button class="group-row ${bg.accent}" data-open-subhub="${bg.id}">
+        <span class="g-icon ${bg.accent}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(bg.icon)}</svg></span>
+        <span class="g-body">
+          <span class="g-title">${bg.title}</span>
+          <span class="g-desc">${bg.desc}</span>
+          <span class="g-tags"><span class="g-tag page-tag">Kelompok 62</span><span class="g-tag">${total} butir kanji</span></span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>`;
+  });
+
+  const allBigTotal = SCOPES['all_big'].build().length;
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backHome"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">UJI HAFALAN KANJI</span>
+          <span class="crumb-title">Pilih Kelompok Besar</span>
+        </div>
+      </div>
+
+      <div class="section-label">Kelompok Besar (Paket 62 Kanji)</div>
+      ${bigRows}
+
+      <div class="section-label">Gabungan Keseluruhan</div>
+      <button class="group-row accent-gold" data-open-quiz-mode="all_big">
+        <span class="g-icon accent-gold"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('trophy')}</svg></span>
+        <span class="g-body">
+          <span class="g-title">Semua Kelompok Besar</span>
+          <span class="g-desc">Latihan gabungan menyeluruh untuk Paket 1, 2, dan 3</span>
+          <span class="g-tags"><span class="g-tag">${allBigTotal} butir kanji</span></span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: SUB-HUB (PILIHAN DI DALAM KELOMPOK 62)
+   ============================================================ */
+function renderTestSubHub(){
+  const bg = BIG_GROUPS.find(b => b.id === state.pendingBigGroup) || BIG_GROUPS[0];
+  const allScopeData = SCOPES[bg.allScope];
+  const totalAll = allScopeData.build().length;
+
+  let subRows = '';
+  bg.subScopes.forEach(sKey => {
+    const s = SCOPES[sKey];
+    const total = s.build().length;
+    subRows += `
+      <button class="group-row ${s.accent}" data-open-quiz-mode="${sKey}">
+        <span class="g-icon ${s.accent}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(s.icon)}</svg></span>
+        <span class="g-body">
+          <span class="g-title">${s.label}</span>
+          <span class="g-desc">${s.desc}</span>
+          <span class="g-tags"><span class="g-tag">${total} butir kanji</span></span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>`;
+  });
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backTestHub"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">${bg.title}</span>
+          <span class="crumb-title">Pilih Cakupan Soal</span>
+        </div>
+      </div>
+
+      <div class="section-label">Latihan Penuh 62 Kanji</div>
+      <button class="group-row accent-gold" data-open-quiz-mode="${bg.allScope}">
+        <span class="g-icon accent-gold"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('hanko')}</svg></span>
+        <span class="g-body">
+          <span class="g-title">${allScopeData.label}</span>
+          <span class="g-desc">${allScopeData.desc}</span>
+          <span class="g-tags"><span class="g-tag page-tag">Lengkap</span><span class="g-tag">${totalAll} butir</span></span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>
+
+      <div class="section-label">Pilih Sub-Kelompok Tematik</div>
+      ${subRows}
+    </div>`;
+}
+
+function renderQuizMode(){
+  const s = SCOPES[state.pendingScope];
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backSubHub"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">METODE LATIHAN</span>
+          <span class="crumb-title">${s.label}</span>
+        </div>
+      </div>
+      <div class="section-label">Pilih Jenis Kuis</div>
+      
+      <button class="mode-card" data-start-mc="${state.pendingScope}">
+        <span class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('target')}</svg></span>
+        <span class="m-body">
+          <span class="m-title">Pilihan Ganda</span>
+          <span class="m-desc">Tebak cara baca hiragana &amp; arti dari tulisan kanji</span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>
+
+      <button class="mode-card mode-match" data-start-match="${state.pendingScope}">
+        <span class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('link')}</svg></span>
+        <span class="m-body">
+          <span class="m-title">Pasangan Jawaban</span>
+          <span class="m-desc">Cocokkan tulisan kanji dengan cara baca hiragana &amp; artinya</span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>
+
+      <button class="mode-card mode-type" data-start-type="${state.pendingScope}">
+        <span class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('keyboard')}</svg></span>
+        <span class="m-body">
+          <span class="m-title">Ketik Manual (Esai &amp; Speedrun)</span>
+          <span class="m-desc">Pilih kanji secara custom, atur timer speedrun, dan simpan riwayat pengerjaan</span>
+        </span>
+        <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
+      </button>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: TYPE SELECT (CHECKBOX, SPEEDRUN & HISTORY PRESET)
+   ============================================================ */
+function renderTypeSelect(){
+  const sKey = state.pendingScope;
+  const s = SCOPES[sKey];
+  const pool = state.typeSelectionPool;
+  const selectedCount = state.selectedTypeUids.size;
+  const allCount = pool.length;
+  const isAllSelected = selectedCount === allCount;
+
+  const gridHtml = pool.map(item => {
+    const checked = state.selectedTypeUids.has(item.uniqueId);
+    return `
+      <div class="kanji-check-tile ${checked ? 'is-checked' : ''}" data-toggle-kanji-uid="${item.uniqueId}">
+        <span class="kanji-check-indicator">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${icon('check')}</svg>
+        </span>
+        <span class="font-kanji">${item.card.kanji}</span>
+      </div>
+    `;
+  }).join('');
+
+  /* History List */
+  const histList = safeGet(STORE.typeHistory, []).filter(h => h.scopeKey === sKey);
+  let historyHtml = '';
+  if(histList.length > 0){
+    historyHtml = `
+      <div class="history-box">
+        <div class="history-box-title">Riwayat Sesi Terakhir (Klik untuk Menggunakan)</div>
+        ${histList.map(h => `
+          <div class="history-item" data-load-history-id="${h.id}">
+            <div class="history-left">
+              <span class="history-count">${h.count} Soal Dikerjakan</span>
+              <span class="history-time">${h.dateStr}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="history-badge">${formatSec(h.durationSec || 0)}</span>
+              ${h.speedrun ? `<span class="history-badge" style="color:var(--accent-sakura-deep);border-color:rgba(209,99,126,0.3);">${h.speedrunSec}s Speedrun</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="back-row">
+        <button class="back-btn" id="backQuizMode"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevLeft')}</svg></button>
+        <div class="crumb">
+          <span class="eyebrow">PILIH SOAL KETIK</span>
+          <span class="crumb-title">${s.label}</span>
+        </div>
+      </div>
+
+      <!-- SPEEDRUN MODE CONTROLLER -->
+      <div class="speedrun-control-card">
+        <div class="speedrun-header">
+          <div class="speedrun-title-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:16px;height:16px;stroke:var(--accent-sakura-deep);">${icon('zap')}</svg>
+            <div>
+              <div class="speedrun-title">Mode Speedrun (Batas Waktu per Soal)</div>
+              <div class="speedrun-desc">${state.isSpeedrun ? 'Tiap soal dibatasi waktu detik' : 'Mode santai tanpa batas waktu per soal'}</div>
+            </div>
+          </div>
+          <button class="switch-btn ${state.isSpeedrun ? 'is-active' : ''}" id="toggleSpeedrunSwitch" role="switch" aria-checked="${state.isSpeedrun}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+
+        ${state.isSpeedrun ? `
+          <div class="stepper-box">
+            <span class="stepper-label">Durasi Waktu Per Soal:</span>
+            <div class="stepper-actions">
+              <button type="button" class="step-btn" id="speedrunDec" title="Kurangi 1 detik">−</button>
+              <span class="step-value">${state.speedrunSec}s</span>
+              <button type="button" class="step-btn" id="speedrunInc" title="Tambah 1 detik">+</button>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- KANJI SELECTION HEADER -->
+      <div class="kanji-select-bar">
+        <span class="kanji-select-meta" id="selectMetaCount">${selectedCount} dari ${allCount} Kanji Terpilih</span>
+        <button type="button" class="nav-btn" id="toggleSelectAllKanji" style="padding:6px 11px;font-size:11px;">
+          ${isAllSelected ? 'Batal Pilih Semua' : 'Pilih Semua'}
+        </button>
+      </div>
+
+      <!-- KANJI TILES GRID -->
+      <div class="kanji-select-grid">
+        ${gridHtml}
+      </div>
+
+      <!-- ACTION BUTTON -->
+      <div style="margin-top:14px;">
+        <button type="button" class="nav-btn primary" id="startCustomTypeQuiz" style="width:100%;" ${selectedCount === 0 ? 'disabled' : ''}>
+          Mulai Latihan (${selectedCount} Soal)<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg>
+        </button>
+      </div>
+
+      <!-- HISTORY PRESETS -->
+      ${historyHtml}
+    </div>
+  `;
+}
+
+function renderQuizPlay(){
+  if(state.quiz.mode === 'mc') renderQuizMC();
+  else if(state.quiz.mode === 'match') renderQuizMatch();
+  else if(state.quiz.mode === 'type') renderQuizType();
+}
+
+function quizHeaderHtml(title, sub){
+  const q = state.quiz;
+  return `
+    <div class="back-row">
+      <button class="back-btn" id="exitQuiz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('close')}</svg></button>
+      <div class="crumb">
+        <span class="eyebrow">${sub}</span>
+        <span class="crumb-title">${title}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="stopwatch-badge" title="Total waktu pengerjaan">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:12px;height:12px;stroke:var(--ink-soft);">${icon('clock')}</svg>
+          <span id="quizTotalTimer">${formatSec(state.totalElapsedSec)}</span>
+        </span>
+        <span class="score-chip correct">${q.correct !== undefined ? q.correct : q.roundsCleared}</span>
+        <span class="score-chip wrong">${q.wrong !== undefined ? q.wrong : q.mistakes}</span>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: KETIK MANUAL (ESAI)
+   ============================================================ */
+function renderQuizType(){
+  const q = state.quiz;
+  if(q.index >= q.questions.length){ renderQuizResult(); return; }
+  const question = q.questions[q.index];
+  const s = SCOPES[q.scopeKey];
+
+  let feedbackHtml = '';
+  if(q.answered){
+    const card = question.item.card;
+    const correctMain = card.kana;
+    const correctSub = card.romaji ? `${card.romaji} · ${card.arti}` : card.arti;
+
+    feedbackHtml = `
+      <div class="type-feedback ${q.isCorrect ? 'correct' : 'wrong'}">
+        <div class="feedback-header">
+          <span class="feedback-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;stroke:currentColor;">
+              ${icon(q.isCorrect ? 'check' : 'close')}
+            </svg>
+            ${q.isCorrect ? 'Tepat Sekali!' : 'Kurang Tepat'}
+          </span>
+          <button class="sound-btn" type="button" aria-label="Audio" style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
+        </div>
+        <div>
+          <div class="feedback-answer">${correctMain}</div>
+          ${correctSub ? `<div class="feedback-romaji">${correctSub}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      ${quizHeaderHtml(s.label, q.isSpeedrun ? `Speedrun (${q.speedrunSec}s)` : 'Ketik Manual')}
+      
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;color:var(--ink-faint);margin-bottom:4px;">
+          <span>SOAL ${q.index+1} DARI ${q.questions.length}</span>
+          ${q.isSpeedrun && !q.answered ? `
+            <span class="speedrun-timer-pill" id="speedrunCountdown">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:10px;height:10px;stroke:currentColor;">${icon('zap')}</svg>
+              ${state.questionTimeLeft}s
+            </span>
+          ` : ''}
+        </div>
+        <div class="progress-bar"><span style="width:${(q.index/q.questions.length)*100}%"></span></div>
+      </div>
+      
+      <div class="bento quiz-question">
+        <span style="font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:6px;">${question.promptSub}</span>
+        <div style="font-size:30px;line-height:1.25;"><span class="font-kanji" lang="ja">${question.promptMain}</span></div>
+      </div>
+
+      <form class="type-form" id="typeQuizForm" onsubmit="return false;">
+        <input type="text" class="type-input" id="typeAnswerInput" 
+               placeholder="Ketik hiragana / romaji..." 
+               value="${q.userInput || ''}" 
+               ${q.answered ? 'disabled' : ''} 
+               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+        
+        ${feedbackHtml}
+
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          ${!q.answered ? `
+            <button type="button" class="nav-btn" id="skipTypeQuestion" style="flex:1;">Lewati</button>
+            <button type="submit" class="nav-btn primary" id="submitTypeAnswer" style="flex:2;">Periksa (Enter)</button>
+          ` : `
+            <button type="button" class="nav-btn primary" id="nextTypeQuestion" style="width:100%;">Lanjut (Enter)<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></button>
+          `}
+        </div>
+      </form>
+    </div>`;
+
+  setTimeout(() => {
+    if(!q.answered){
+      const input = document.getElementById('typeAnswerInput');
+      if(input) input.focus();
+    } else {
+      const nextBtn = document.getElementById('nextTypeQuestion');
+      if(nextBtn) nextBtn.focus();
+    }
+  }, 50);
+}
+
+function renderQuizMC(){
+  const q = state.quiz;
+  if(q.index >= q.questions.length){ renderQuizResult(); return; }
+  const question = q.questions[q.index];
+  const s = SCOPES[q.scopeKey];
+
+  const optsHtml = question.options.map((opt, i) => `
+    <button class="quiz-option" data-mc-option="${i}">
+      <span><span>${opt.text}</span>${opt.sub ? `<span style="display:block;font-size:10px;color:var(--ink-faint);margin-top:1px;">${opt.sub}</span>` : ''}</span>
+      <span class="opt-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span>
+    </button>`).join('');
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      ${quizHeaderHtml(s.label, 'Pilihan Ganda')}
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:var(--ink-faint);margin-bottom:4px;">
+          <span>SOAL ${q.index+1} DARI ${q.questions.length}</span>
+        </div>
+        <div class="progress-bar"><span style="width:${(q.index/q.questions.length)*100}%"></span></div>
+      </div>
+      <div class="bento quiz-question">
+        <span style="font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:6px;">${question.promptSub}</span>
+        <div style="font-size:28px;line-height:1.25;"><span class="font-kanji" lang="ja">${question.promptMain}</span></div>
+      </div>
+      <div id="quizOptions">${optsHtml}</div>
+    </div>`;
+}
+
+function renderQuizMatch(){
+  const q = state.quiz;
+  const round = q.rounds[q.roundIndex];
+  const s = SCOPES[q.scopeKey];
+
+  function tileClass(side, i){
+    if(q.matched.has(i)) return 'is-correct';
+    if(q.selected && q.selected.side===side && q.selected.idx===i) return 'is-selected';
+    if(q.wrongFlash && ((q.wrongFlash.a.side===side && q.wrongFlash.a.idx===i) || (q.wrongFlash.b.side===side && q.wrongFlash.b.idx===i))) return 'is-wrong';
+    return '';
+  }
+
+  const leftHtml = q.leftOrder.map(i => {
+    const item = round[i];
+    return `<button class="match-tile ${tileClass('left',i)}" data-match-side="left" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}><span class="font-kanji" lang="ja" style="font-size:15px;">${item.card.kanji}</span></button>`;
+  }).join('');
+
+  const rightHtml = q.rightOrder.map(i => {
+    const item = round[i];
+    return `<button class="match-tile ${tileClass('right',i)}" data-match-side="right" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}>${item.card.kana} <span style="font-size:9.5px;opacity:.7;">(${item.card.arti})</span></button>`;
+  }).join('');
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      ${quizHeaderHtml(s.label, 'Pasangan Jawaban')}
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:var(--ink-faint);margin-bottom:4px;">
+          <span>RONDE ${q.roundIndex+1} DARI ${q.rounds.length}</span>
+        </div>
+        <div class="progress-bar"><span style="width:${(q.roundIndex/q.rounds.length)*100}%"></span></div>
+      </div>
+      <div class="match-columns">
+        <div class="match-col">${leftHtml}</div>
+        <div class="match-col">${rightHtml}</div>
+      </div>
+    </div>`;
+}
+
+function renderQuizResult(){
+  const q = state.quiz;
+  q.finished = true;
+  stopAllQuizTimers();
+
+  if(q.mode === 'type'){
+    saveTypeHistoryEntry(q);
+  }
+
+  let scoreBig, scoreLabel;
+  if(q.mode === 'match'){
+    scoreBig = q.rounds.length;
+    scoreLabel = `${q.rounds.length} Ronde Selesai (${q.mistakes} kesalahan)`;
+  } else {
+    const pct = Math.round((q.correct/q.questions.length)*100);
+    scoreBig = pct + '%';
+    scoreLabel = `${q.correct} benar dari ${q.questions.length} soal`;
+  }
+
+  screenEl.innerHTML = `
+    <div class="screen-inner">
+      <div class="bento result-card">
+        <div class="r-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('trophy')}</svg></div>
+        <div class="r-score">${scoreBig}</div>
+        <div style="font-size:12px;color:var(--ink-soft);margin-top:6px;">${scoreLabel}</div>
+        <div style="font-size:11.5px;font-weight:700;color:var(--accent-indigo);margin-top:6px;">
+          Total Waktu Pengerjaan: ${formatSec(state.totalElapsedSec)}
+          ${q.isSpeedrun ? ` · Mode Speedrun (${q.speedrunSec}s)` : ''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;">
+        <button class="nav-btn primary" id="retryQuiz">Ulangi Latihan</button>
+        <button class="nav-btn" id="backTestHubFromResult">Kembali ke Menu Latihan</button>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   EVENT DELEGATION
+   ============================================================ */
+function render(){
+  if(state.screen === 'home') renderHome();
+  else if(state.screen === 'chapter') renderChapter(state.chapterId);
+  else if(state.screen === 'deck') renderDeck(state.chapterId, state.groupId);
+  else if(state.screen === 'test-hub') renderTestHub();
+  else if(state.screen === 'test-subhub') renderTestSubHub();
+  else if(state.screen === 'quiz-mode') renderQuizMode();
+  else if(state.screen === 'type-select') renderTypeSelect();
+  else if(state.screen === 'quiz-play') renderQuizPlay();
+}
+
+function handleTypeSubmit(){
+  const q = state.quiz;
+  if(!q || q.mode !== 'type') return;
+  if(!q.answered){
+    if(state.questionTimer){ clearInterval(state.questionTimer); state.questionTimer = null; }
+    const input = document.getElementById('typeAnswerInput');
+    const val = input ? input.value : '';
+    q.userInput = val;
+    const question = q.questions[q.index];
+    const isRight = checkTypeAnswer(val, question.item.card);
+    q.isCorrect = isRight;
+    if(isRight){
+      q.correct++;
+      speakKana(question.item.card.kana);
+    } else {
+      q.wrong++;
+    }
+    q.answered = true;
+    renderQuizType();
+  } else {
+    q.index++;
+    q.answered = false;
+    q.userInput = '';
+    renderQuizType();
+    resetQuestionTimer();
+  }
+}
+
+screenEl.addEventListener('click', (e)=>{
+  const openChap = e.target.closest('[data-open-chapter]');
+  if(openChap){ goChapter(openChap.getAttribute('data-open-chapter')); return; }
+
+  const openDeck = e.target.closest('[data-open-deck]');
+  if(openDeck){ goDeck(state.chapterId, openDeck.getAttribute('data-open-deck')); return; }
+
+  const openSubHub = e.target.closest('[data-open-subhub]');
+  if(openSubHub){ goTestSubHub(openSubHub.getAttribute('data-open-subhub')); return; }
+
+  const openQuizMode = e.target.closest('[data-open-quiz-mode]');
+  if(openQuizMode){ goQuizMode(openQuizMode.getAttribute('data-open-quiz-mode')); return; }
+
+  if(e.target.closest('#openTestHub')){ goTestHub(); return; }
+  if(e.target.closest('#backTestHub')){ goTestHub(); return; }
+  if(e.target.closest('#backSubHub')){
+    if(state.pendingBigGroup) goTestSubHub(state.pendingBigGroup);
+    else goTestHub();
+    return;
+  }
+  if(e.target.closest('#backTestHubFromResult')){ goTestHub(); return; }
+  if(e.target.closest('#backQuizMode')){ goQuizMode(state.pendingScope); return; }
+  if(e.target.closest('#exitQuiz')){ exitQuiz(); return; }
+
+  const startMc = e.target.closest('[data-start-mc]');
+  if(startMc){ startMCQuiz(startMc.getAttribute('data-start-mc')); return; }
+
+  const startMatch = e.target.closest('[data-start-match]');
+  if(startMatch){ startMatchQuiz(startMatch.getAttribute('data-start-match')); return; }
+
+  const startType = e.target.closest('[data-start-type]');
+  if(startType){ openTypeSelect(startType.getAttribute('data-start-type')); return; }
+
+  /* Interaksi Mode Speedrun & Stepper */
+  if(e.target.closest('#toggleSpeedrunSwitch')){
+    state.isSpeedrun = !state.isSpeedrun;
+    renderTypeSelect();
+    return;
+  }
+
+  if(e.target.closest('#speedrunDec')){
+    state.speedrunSec = Math.max(3, state.speedrunSec - 1);
+    safeSet(STORE.speedrunSeconds, state.speedrunSec);
+    renderTypeSelect();
+    return;
+  }
+
+  if(e.target.closest('#speedrunInc')){
+    state.speedrunSec = Math.min(60, state.speedrunSec + 1);
+    safeSet(STORE.speedrunSeconds, state.speedrunSec);
+    renderTypeSelect();
+    return;
+  }
+
+  /* Interaksi Pemilihan Soal Ketik Manual (Checkbox Kanji) */
+  const tileKanji = e.target.closest('[data-toggle-kanji-uid]');
+  if(tileKanji){
+    const uid = tileKanji.getAttribute('data-toggle-kanji-uid');
+    if(state.selectedTypeUids.has(uid)){
+      state.selectedTypeUids.delete(uid);
+    } else {
+      state.selectedTypeUids.add(uid);
+    }
+    renderTypeSelect();
+    return;
+  }
+
+  if(e.target.closest('#toggleSelectAllKanji')){
+    if(state.selectedTypeUids.size === state.typeSelectionPool.length){
+      state.selectedTypeUids.clear();
+    } else {
+      state.selectedTypeUids = new Set(state.typeSelectionPool.map(item => item.uniqueId));
+    }
+    renderTypeSelect();
+    return;
+  }
+
+  /* Load Preset dari History */
+  const histItem = e.target.closest('[data-load-history-id]');
+  if(histItem){
+    const hId = parseInt(histItem.getAttribute('data-load-history-id'), 10);
+    const histList = safeGet(STORE.typeHistory, []);
+    const found = histList.find(h => h.id === hId);
+    if(found && Array.isArray(found.uids)){
+      state.selectedTypeUids = new Set(found.uids.filter(uid => state.typeSelectionPool.some(item => item.uniqueId === uid)));
+      if(found.speedrun !== undefined) state.isSpeedrun = found.speedrun;
+      if(found.speedrunSec) state.speedrunSec = found.speedrunSec;
+      renderTypeSelect();
+    }
+    return;
+  }
+
+  if(e.target.closest('#startCustomTypeQuiz')){
+    startCustomTypeQuiz();
+    return;
+  }
+
+  if(e.target.closest('#retryQuiz')){
+    if(state.quiz.mode === 'mc') startMCQuiz(state.quiz.scopeKey);
+    else if(state.quiz.mode === 'match') startMatchQuiz(state.quiz.scopeKey);
+    else if(state.quiz.mode === 'type') openTypeSelect(state.quiz.scopeKey);
+    return;
+  }
+
+  if(e.target.closest('#submitTypeAnswer') || e.target.closest('#nextTypeQuestion')){
+    handleTypeSubmit();
+    return;
+  }
+
+  if(e.target.closest('#skipTypeQuestion')){
+    const q = state.quiz;
+    if(state.questionTimer){ clearInterval(state.questionTimer); state.questionTimer = null; }
+    q.userInput = '(Dilewati)';
+    q.isCorrect = false;
+    q.wrong++;
+    q.answered = true;
+    renderQuizType();
+    return;
+  }
+
+  const mcOpt = e.target.closest('[data-mc-option]');
+  if(mcOpt){
+    const q = state.quiz;
+    if(q.answered) return;
+    q.answered = true;
+    const optIdx = parseInt(mcOpt.getAttribute('data-mc-option'), 10);
+    const question = q.questions[q.index];
+    const chosen = question.options[optIdx];
+    screenEl.querySelectorAll('[data-mc-option]').forEach((btn, i) => {
+      btn.classList.add('is-disabled');
+      if(question.options[i].correct) btn.classList.add('is-correct');
+      else if(i === optIdx) btn.classList.add('is-wrong');
+    });
+    if(chosen.correct) q.correct++; else q.wrong++;
+    setTimeout(() => { q.index++; q.answered = false; renderQuizPlay(); }, 850);
+    return;
+  }
+
+  const matchTile = e.target.closest('[data-match-side]');
+  if(matchTile && !matchTile.disabled){
+    const q = state.quiz;
+    if(q.wrongFlash) return;
+    const side = matchTile.getAttribute('data-match-side');
+    const idx = parseInt(matchTile.getAttribute('data-match-idx'), 10);
+
+    if(!q.selected || q.selected.side === side){ q.selected = {side, idx}; renderQuizMatch(); return; }
+
+    const prev = q.selected;
+    if(prev.idx === idx){
+      q.matched.add(idx);
+      q.selected = null;
+      renderQuizMatch();
+      if(q.matched.size === q.rounds[q.roundIndex].length){
+        setTimeout(()=>{
+          q.roundIndex++;
+          q.roundsCleared = q.roundIndex;
+          if(q.roundIndex >= q.rounds.length) renderQuizResult();
+          else { setupMatchRound(); renderQuizPlay(); }
+        }, 500);
+      }
+    } else {
+      q.mistakes++;
+      q.wrongFlash = { a: prev, b: {side, idx} };
+      q.selected = null;
+      renderQuizMatch();
+      setTimeout(()=>{ q.wrongFlash = null; renderQuizMatch(); }, 500);
+    }
+    return;
+  }
+
+  if(e.target.closest('#backHome')){ goHome(); return; }
+  if(e.target.closest('#backChapter')){ goChapter(state.chapterId); return; }
+
+  const toggleRev = e.target.closest('#toggleReverse');
+  if(toggleRev){
+    state.reverseMode = !state.reverseMode;
+    safeSet(STORE.reverseMode, state.reverseMode);
+    renderDeck(state.chapterId, state.groupId);
+    return;
+  }
+
+  const toggleAutoTTS = e.target.closest('#toggleAutoTTS');
+  if(toggleAutoTTS){
+    state.autoTTS = !state.autoTTS;
+    safeSet(STORE.autoTTS, state.autoTTS);
+    renderDeck(state.chapterId, state.groupId);
+    if(state.autoTTS) playCurrentCardTTS();
+    return;
+  }
+
+  if(e.target.closest('#shuffleDeck')){
+    const chap = CHAPTERS.find(c => c.id === state.chapterId);
+    if (chap) {
+      const g = chap.groups.find(gr => gr.id === state.groupId);
+      if (g) {
+        let pool = g.cards.map((_,i)=>i).filter(i => !excludedSet.has(cardUid(g.id, i)));
+        if(pool.length === 0) pool = g.cards.map((_,i)=>i);
+        state.order = shuffleArray(pool);
+        state.cardIndex = 0;
+        state.shuffled = true;
+        renderDeck(state.chapterId, state.groupId);
+        playCurrentCardTTS();
+      }
+    }
+    return;
+  }
+
+  if(e.target.closest('#resetProgress')){
+    if(confirm('Setel ulang seluruh progres hafalan 186 Kanji Dasar?')){
+      Object.values(STORE).forEach(k => localStorage.removeItem(k));
+      location.reload();
+    }
+    return;
+  }
+
+  const prevBtn = e.target.closest('#prevCard');
+  if(prevBtn && !prevBtn.disabled){ 
+    state.cardIndex = Math.max(0, state.cardIndex-1); 
+    renderDeck(state.chapterId, state.groupId); 
+    playCurrentCardTTS();
+    return; 
+  }
+
+  const nextBtn = e.target.closest('#nextCard');
+  if(nextBtn && !nextBtn.disabled){ 
+    state.cardIndex = Math.min(state.order.length-1, state.cardIndex+1); 
+    renderDeck(state.chapterId, state.groupId); 
+    playCurrentCardTTS();
+    return; 
+  }
+
+  const soundBtn = e.target.closest('.sound-btn');
+  if(soundBtn){
+    if(state.screen === 'quiz-play' && state.quiz && state.quiz.mode === 'type'){
+      const card = state.quiz.questions[state.quiz.index].item.card;
+      speakKana(card.kana);
+      return;
+    }
+    const chap = CHAPTERS.find(c => c.id === state.chapterId);
+    if (chap) {
+      const g = chap.groups.find(gr => gr.id === state.groupId);
+      if (g) {
+        const card = g.cards[state.order[state.cardIndex]];
+        if (card && card.words) {
+          speakKana(card.words.map(w => w.jp).join('、'));
+        }
+      }
+    }
+    return;
+  }
+
+  const exBtn = e.target.closest('#excludeCard');
+  if(exBtn){
+    const chap = CHAPTERS.find(c => c.id === state.chapterId);
+    if (chap) {
+      const g = chap.groups.find(gr => gr.id === state.groupId);
+      if (g) {
+        const uid = cardUid(g.id, state.order[state.cardIndex]);
+        if(excludedSet.has(uid)) excludedSet.delete(uid); else excludedSet.add(uid);
+        saveExcluded();
+        renderDeck(state.chapterId, state.groupId);
+      }
+    }
+    return;
+  }
+
+  const cardEl = e.target.closest('#activeCard');
+  if(cardEl){
+    cardEl.classList.toggle('flipped');
+    const chap = CHAPTERS.find(c => c.id === state.chapterId);
+    if (chap) {
+      const g = chap.groups.find(gr => gr.id === state.groupId);
+      if (g) {
+        const uid = cardUid(g.id, state.order[state.cardIndex]);
+        if(cardEl.classList.contains('flipped') && !learnedSet.has(uid)){
+          learnedSet.add(uid);
+          cardEl.classList.add('is-learned');
+          saveLearned();
+        }
+      }
+    }
+    return;
+  }
+});
+
+/* Tangkap Form Submit via Tombol Enter pada Keyboard */
+screenEl.addEventListener('submit', (e)=>{
+  if(e.target.id === 'typeQuizForm'){
+    e.preventDefault();
+    handleTypeSubmit();
+  }
+});
+
+/* ============================================================
+   THEME & STREAK
+   ============================================================ */
+const app = document.getElementById('app');
+const toggle = document.getElementById('themeToggle');
+const knobIcon = document.getElementById('knobIcon');
+const sunPath = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+const moonPath = '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>';
+
+function applyTheme(t){ app.setAttribute('data-theme', t); knobIcon.innerHTML = t==='dark' ? moonPath : sunPath; }
+applyTheme(safeGet(STORE.theme, 'light'));
+toggle.addEventListener('click', ()=>{ const next = app.getAttribute('data-theme')==='dark'?'light':'dark'; applyTheme(next); safeSet(STORE.theme, next); });
+
+(function updateStreak(){
+  const todayKey = new Date().toDateString();
+  const lastVisit = safeGet(STORE.lastVisit, null);
+  let streak = safeGet(STORE.streak, 0);
+  if(lastVisit !== todayKey){
+    const y = new Date(); y.setDate(y.getDate()-1);
+    streak = (lastVisit === y.toDateString()) ? streak+1 : 1;
+    safeSet(STORE.streak, streak); safeSet(STORE.lastVisit, todayKey);
+  } else if(!streak){
+    streak = 1; safeSet(STORE.streak, streak); safeSet(STORE.lastVisit, todayKey);
+  }
+})();
+
+/* ============================================================
+   PETALS ANIMATION
+   ============================================================ */
+const petalHost = document.getElementById('petals');
+for(let i=0; i<8; i++){
+  const p = document.createElement('div'); p.className = 'petal';
+  p.style.left = (Math.random()*100)+'%';
+  const s = 5+Math.random()*5;
+  p.style.width = s+'px'; p.style.height = s+'px';
+  p.style.setProperty('--drift', (Math.random()*50-25)+'px');
+  p.style.animationDuration = (7+Math.random()*5)+'s';
+  p.style.animationDelay = (Math.random()*-10)+'s';
+  petalHost.appendChild(p);
+}
+
+render();
+</script>
+</body>
+</html>
