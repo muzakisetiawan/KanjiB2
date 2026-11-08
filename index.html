@@ -384,7 +384,7 @@
 
   .match-columns{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; }
   .match-col{ display:flex; flex-direction:column; gap:6px; }
-  .match-tile{ padding:8px; border-radius:10px; background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:600; color:var(--ink); text-align:center; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; }
+  .match-tile{ padding:8px; border-radius:10px; background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:13px; font-weight:600; color:var(--ink); text-align:center; cursor:pointer; min-height:44px; display:flex; align-items:center; justify-content:center; }
   .match-tile.is-selected{ border-color:var(--accent-indigo); background: color-mix(in srgb, var(--accent-indigo) 16%, var(--card-bg)); }
   .match-tile.is-correct{ border-color:var(--color-correct); background: color-mix(in srgb, var(--color-correct) 16%, var(--card-bg)); opacity:.55; pointer-events:none; }
   .match-tile.is-wrong{ border-color:var(--color-wrong); background: color-mix(in srgb, var(--color-wrong) 18%, var(--card-bg)); }
@@ -546,7 +546,7 @@
   <div class="content">
     <div class="topbar">
       <div class="brand">
-        <span class="eyebrow">JLPT N5 & JFT A2 · 186 KANJI LENGKAP</span>
+        <span class="eyebrow">JLPT N5 &amp; JFT A2 · 186 KANJI LENGKAP</span>
         <span class="title"><span>和</span> Flashcards</span>
         <span class="rule"></span>
       </div>
@@ -727,7 +727,7 @@ const CHAPTERS = [
           k('東', [{ kanjiText:'東', jp:'<ruby>東<rt>ひがし</rt></ruby>', kana:'ひがし', id:'Timur', romaji:'higashi' }]),
           k('西', [{ kanjiText:'西', jp:'<ruby>西<rt>にし</rt></ruby>', kana:'にし', id:'Barat', romaji:'nishi' }]),
           k('南', [{ kanjiText:'南', jp:'<ruby>南<rt>みなみ</rt></ruby>', kana:'みなみ', id:'Selatan', romaji:'minami' }]),
-          k('北', [{ kanjiText:'北', jp:'<ruby>北<rt>きた</rt></ruby>', kana:'きた', id:'Utara', romaji:'kita' }]),
+          k('北', [{ kanjiText:'北', jp:'<ruby>北<rt>きた</rt></ruby>', kana:'kita', id:'Utara', romaji:'kita' }]),
           k('～口', [{ kanjiText:'～口', jp:'～<ruby>口<rt>ぐち</rt></ruby>', kana:'～ぐち', id:'~ pintu', romaji:'~guchi' }]),
           k('東口', [{ kanjiText:'東口', jp:'<ruby>東<rt>ひがし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'ひがしぐち', id:'Pintu timur', romaji:'higashiguchi' }]),
           k('西口', [{ kanjiText:'西口', jp:'<ruby>西<rt>にし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'にしぐち', id:'Pintu barat', romaji:'nishiguchi' }]),
@@ -759,11 +759,11 @@ const CHAPTERS = [
     id: 'paket_2',
     number: '02',
     title: 'Paket 2: 62 Kanji Lanjutan',
-    desc: '62 Kanji Dasar N5 & JFT A2 (No. 63–125) terbagi dalam 4 sub-kelompok tematik',
+    desc: '62 Kosakata Kanji N5 & JFT A2 (No. 63–125) terbagi dalam 4 sub-kelompok',
     icon: 'target', accent: 'accent-sakura',
     groups: [
       {
-        id: 'p2_g1', title: '1. Identitas, Keluarga & Bahasa', desc: '20 Kanji: 日本, 東京, 私, 父, 母, 子供, 国, 日本語, dll. (No. 63–82)', page: 'No. 63–82', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-sakura',
+        id: 'p2_g1', title: '1. Identitas, Keluarga & Bahasa', desc: '20 Kanji: 日本, 東京, 私, 父, 母, 子供, 国, 日本語, dll. (No. 63–82)', page: 'No. 63–82', kategori: 'Kanji JFT', icon: 'hanko', accent: 'accent-sakura',
         cards: [
           k('日本', [{ kanjiText:'日本', jp:'<ruby>日本<rt>にほん</rt></ruby>', kana:'にほん', id:'Jepang', romaji:'nihon' }]),
           k('東京', [{ kanjiText:'東京', jp:'<ruby>東京<rt>とうきょう</rt></ruby>', kana:'とうきょう', id:'Tokyo', romaji:'toukyou' }]),
@@ -776,24 +776,24 @@ const CHAPTERS = [
           k('人', [{ kanjiText:'人', jp:'<ruby>人<rt>ひと</rt></ruby>', kana:'ひと', id:'Orang', romaji:'hito' }]),
           k('お父さん', [{ kanjiText:'お父さん', jp:'お<ruby>父<rt>とう</rt></ruby>さん', kana:'おとうさん', id:'Ayah (orang lain)', romaji:'otousan' }]),
           k('お母さん', [{ kanjiText:'お母さん', jp:'お<ruby>母<rt>かあ</rt></ruby>さん', kana:'おかあさん', id:'Ibu (orang lain)', romaji:'okaasan' }]),
-          k('何人', [{ kanjiText:'何人', jp:'<ruby>何人<rt>なんにん</rt></ruby>', kana:'なんにん', id:'Berapa orang', romaji:'nannin' }]),
+          k('何人', [{ kanjiText:'何人', jp:'<ruby>何人<rt>なんにん</rt></ruby>', kana:'なんにん', id:'Berapa orang?', romaji:'nannin' }]),
           k('国', [{ kanjiText:'国', jp:'<ruby>国<rt>くに</rt></ruby>', kana:'くに', id:'Negara', romaji:'kuni' }]),
-          k('外国', [{ kanjiText:'外国', jp:'<ruby>外国<rt>がいこく</rt></ruby>', kana:'がいこく', id:'Luar negeri', romaji:'gaikoku' }]),
+          k('外国', [{ kanjiText:'外国', jp:'<ruby>外国<rt>がいこく</rt></ruby>', kana:'がいこく', id:'Luar negri', romaji:'gaikoku' }]),
           k('～語', [{ kanjiText:'～語', jp:'～<ruby>語<rt>ご</rt></ruby>', kana:'～ご', id:'~ Bahasa', romaji:'~go' }]),
-          k('日本語', [{ kanjiText:'日本語', jp:'<ruby>日本語<rt>にほんご</rt></ruby>', kana:'にほんご', id:'Bahasa Jepang', romaji:'nihongo' }]),
-          k('英語', [{ kanjiText:'英語', jp:'<ruby>英語<rt>えいご</rt></ruby>', kana:'えいご', id:'Bahasa Inggris', romaji:'eigo' }]),
-          k('中国語', [{ kanjiText:'中国語', jp:'<ruby>中国語<rt>ちゅうごくご</rt></ruby>', kana:'ちゅうごくご', id:'Bahasa China', romaji:'chuugokugo' }]),
+          k('日本語', [{ kanjiText:'日本語', jp:'<ruby>日本語<rt>にほんご</rt></ruby>', kana:'にほんご', id:'Bahasa jepang', romaji:'nihongo' }]),
+          k('英語', [{ kanjiText:'英語', jp:'<ruby>英語<rt>えいご</rt></ruby>', kana:'えいご', id:'Bahasa inggris', romaji:'eigo' }]),
+          k('中国語', [{ kanjiText:'中国語', jp:'<ruby>中国語<rt>ちゅうごくご</rt></ruby>', kana:'ちゅうごくご', id:'Bahasa china', romaji:'chuugokugo' }]),
           k('～人', [{ kanjiText:'～人', jp:'～<ruby>人<rt>じん</rt></ruby>', kana:'～じん、～にん', id:'~ orang', romaji:'~jin, ~nin' }]),
-          k('日本人', [{ kanjiText:'日本人', jp:'<ruby>日本人<rt>にほんじん</rt></ruby>', kana:'にほんじん', id:'Orang Jepang', romaji:'nihonjin' }])
+          k('日本人', [{ kanjiText:'日本人', jp:'<ruby>日本人<rt>にほんじん</rt></ruby>', kana:'にほんじん', id:'Orang jepang', romaji:'nihonjin' }])
         ]
       },
       {
-        id: 'p2_g2', title: '2. Minat, Musim & Alam', desc: '13 Kanji: 好き, 本, 読書, 春, 夏, 秋, 冬, 花, 海, 山, 川, dll. (No. 83–95)', page: 'No. 83–95', kategori: 'Kanji N5', icon: 'book', accent: 'accent-gold',
+        id: 'p2_g2', title: '2. Minat, Musim & Alam', desc: '13 Kanji: 好き, 本, 読書, 春, 夏, 秋, 冬, 花, 海, 山, 川, dll. (No. 83–95)', page: 'No. 83–95', kategori: 'Kanji JFT', icon: 'book', accent: 'accent-gold',
         cards: [
           k('好き', [{ kanjiText:'好き', jp:'<ruby>好<rt>す</rt></ruby>き', kana:'すき', id:'Suka', romaji:'suki' }]),
           k('本', [{ kanjiText:'本', jp:'<ruby>本<rt>ほん</rt></ruby>', kana:'ほん', id:'Buku', romaji:'hon' }]),
           k('読書', [{ kanjiText:'読書', jp:'<ruby>読書<rt>どくしょ</rt></ruby>', kana:'どくしょ', id:'Bacaan', romaji:'dokusho' }]),
-          k('何', [{ kanjiText:'何', jp:'<ruby>何<rt>なに</rt></ruby>', kana:'なに', id:'Apa', romaji:'nani' }]),
+          k('何', [{ kanjiText:'何', jp:'<ruby>何<rt>なに</rt></ruby>', kana:'なに', id:'Apa?', romaji:'nani' }]),
           k('春', [{ kanjiText:'春', jp:'<ruby>春<rt>はる</rt></ruby>', kana:'はる', id:'Musim semi', romaji:'haru' }]),
           k('夏', [{ kanjiText:'夏', jp:'<ruby>夏<rt>なつ</rt></ruby>', kana:'なつ', id:'Musim panas', romaji:'natsu' }]),
           k('秋', [{ kanjiText:'秋', jp:'<ruby>秋<rt>あき</rt></ruby>', kana:'あき', id:'Musim gugur', romaji:'aki' }]),
@@ -806,7 +806,7 @@ const CHAPTERS = [
         ]
       },
       {
-        id: 'p2_g3', title: '3. Cuaca & Lingkungan Kota', desc: '11 Kanji: 今日, 天気, 晴れ, 雨, 雪, 雲, 風, 空, 町, 店, 人気 (No. 96–106)', page: 'No. 96–106', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-indigo',
+        id: 'p2_g3', title: '3. Cuaca & Lingkungan Kota', desc: '11 Kanji: 今日, 天気, 晴れ, 雨, 雪, 雲, 風, 空, 町, 店, 人気 (No. 96–106)', page: 'No. 96–106', kategori: 'Kanji JFT', icon: 'layers', accent: 'accent-indigo',
         cards: [
           k('今日', [{ kanjiText:'今日', jp:'<ruby>今日<rt>きょう</rt></ruby>', kana:'きょう', id:'Hari ini', romaji:'kyou' }]),
           k('天気', [{ kanjiText:'天気', jp:'<ruby>天気<rt>てんき</rt></ruby>', kana:'てんき', id:'Cuaca', romaji:'tenki' }]),
@@ -822,7 +822,7 @@ const CHAPTERS = [
         ]
       },
       {
-        id: 'p2_g4', title: '4. Sifat, Posisi, Warna & Lokasi', desc: '18 Kanji: 多い, 少ない, 高い, 安い, 道, 右, 左, 赤い, 時間, 駅, dll. (No. 107–125)', page: 'No. 107–125', kategori: 'Kanji N5', icon: 'scale', accent: 'accent-sakura',
+        id: 'p2_g4', title: '4. Sifat, Posisi, Warna & Lokasi', desc: '18 Kanji: 多い, 少ない, 高い, 安い, 道, 右, 左, 赤い, 時間, 駅, dll. (No. 107–125)', page: 'No. 107–125', kategori: 'Kanji JFT', icon: 'scale', accent: 'accent-sakura',
         cards: [
           k('多い', [{ kanjiText:'多い', jp:'<ruby>多<rt>おお</rt></ruby>い', kana:'おおい', id:'Banyak', romaji:'ooi' }]),
           k('少ない', [{ kanjiText:'少ない', jp:'<ruby>少<rt>すく</rt></ruby>ない', kana:'すくない', id:'Sedikit', romaji:'sukunai' }]),
@@ -850,11 +850,11 @@ const CHAPTERS = [
     id: 'paket_3',
     number: '03',
     title: 'Paket 3: 62 Kanji Lanjutan',
-    desc: '62 Kanji Dasar N5 & JFT A2 (No. 126–188) terbagi dalam 4 sub-kelompok tematik',
+    desc: '62 Kosakata Kanji N5 & JFT A2 (No. 126–188) terbagi dalam 4 sub-kelompok',
     icon: 'layers', accent: 'accent-indigo',
     groups: [
       {
-        id: 'p3_g1', title: '1. Rutinitas, Waktu & Gerak', desc: '11 Kanji: 出かけます, 待ちます, 止まります, 食事, 仕事, 前, 後, 朝, dll. (No. 126–136)', page: 'No. 126–136', kategori: 'Kanji N5', icon: 'target', accent: 'accent-indigo',
+        id: 'p3_g1', title: '1. Rutinitas, Waktu & Gerak', desc: '11 Kanji: 出かけます, 待ちます, 止まります, 食事, 仕事, 前, 後, 朝, dll. (No. 126–136)', page: 'No. 126–136', kategori: 'Kanji JFT', icon: 'target', accent: 'accent-indigo',
         cards: [
           k('出かけます', [{ kanjiText:'出かけます', jp:'<ruby>出<rt>で</rt></ruby>かけます', kana:'でかけます', id:'Meninggalkan rumah', romaji:'dekakemasu' }]),
           k('待ちます', [{ kanjiText:'待ちます', jp:'<ruby>待<rt>ま</rt></ruby>ちます', kana:'まちます', id:'Menunggu', romaji:'machimasu' }]),
@@ -870,7 +870,7 @@ const CHAPTERS = [
         ]
       },
       {
-        id: 'p3_g2', title: '2. Sekolah, Pendidikan & Wisata', desc: '17 Kanji: 学校, 大学, 先生, 学生, 勉強, 文化, 音楽, 旅行, 友達, dll. (No. 137–153)', page: 'No. 137–153', kategori: 'Kanji N5', icon: 'book', accent: 'accent-sakura',
+        id: 'p3_g2', title: '2. Sekolah, Pendidikan & Wisata', desc: '17 Kanji: 学校, 大学, 先生, 学生, 勉強, 文化, 音楽, 旅行, 友達, dll. (No. 137–153)', page: 'No. 137–153', kategori: 'Kanji JFT', icon: 'book', accent: 'accent-sakura',
         cards: [
           k('学校', [{ kanjiText:'学校', jp:'<ruby>学校<rt>がっこう</rt></ruby>', kana:'がっこう', id:'Sekolahan', romaji:'gakkou' }]),
           k('小学校', [{ kanjiText:'小学校', jp:'<ruby>小学校<rt>しょうがっこう</rt></ruby>', kana:'しょうがっこう', id:'SD', romaji:'shougakkou' }]),
@@ -878,7 +878,7 @@ const CHAPTERS = [
           k('高校', [{ kanjiText:'高校', jp:'<ruby>高校<rt>こうこう</rt></ruby>', kana:'こうこう', id:'SMA', romaji:'koukou' }]),
           k('大学', [{ kanjiText:'大学', jp:'<ruby>大学<rt>だいがく</rt></ruby>', kana:'だいがく', id:'Universitas', romaji:'daigaku' }]),
           k('先生', [{ kanjiText:'先生', jp:'<ruby>先生<rt>せんせい</rt></ruby>', kana:'せんせい', id:'Guru', romaji:'sensei' }]),
-          k('学生', [{ kanjiText:'学生', jp:'<ruby>学生<rt>がくせい</rt></ruby>', kana:'がくせい', id:'Murid, siswa', romaji:'gakusei' }]),
+          k('学生', [{ kanjiText:'学生', jp:'<ruby>学生<rt>がくせい</rt></ruby>', kana:'がくせい', id:'Murid , siswa', romaji:'gakusei' }]),
           k('～年生', [{ kanjiText:'～年生', jp:'～<ruby>年生<rt>ねんせい</rt></ruby>', kana:'～ねんせい', id:'Kelas ~', romaji:'~nensei' }]),
           k('勉強', [{ kanjiText:'勉強', jp:'<ruby>勉強<rt>べんきょう</rt></ruby>', kana:'べんきょう', id:'Pelajaran', romaji:'benkyou' }]),
           k('文化', [{ kanjiText:'文化', jp:'<ruby>文化<rt>ぶんか</rt></ruby>', kana:'ぶんか', id:'Kebudayaan', romaji:'bunka' }]),
@@ -892,7 +892,7 @@ const CHAPTERS = [
         ]
       },
       {
-        id: 'p3_g3', title: '3. Kuliner, Masakan & Bahan', desc: '14 Kanji: 食べ物, 飲物, お茶, お酒, 作ります, 料理, 味, 野菜, dll. (No. 154–167)', page: 'No. 154–167', kategori: 'Kanji N5', icon: 'hanko', accent: 'accent-gold',
+        id: 'p3_g3', title: '3. Kuliner, Masakan & Bahan', desc: '14 Kanji: 食べ物, 飲物, お茶, お酒, 作ります, 料理, 味, 野菜, dll. (No. 154–167)', page: 'No. 154–167', kategori: 'Kanji JFT', icon: 'hanko', accent: 'accent-gold',
         cards: [
           k('食べ物', [{ kanjiText:'食べ物', jp:'<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>', kana:'たべもの', id:'Makanan', romaji:'tabemono' }]),
           k('飲物', [{ kanjiText:'飲物', jp:'<ruby>飲物<rt>のみもの</rt></ruby>', kana:'のみもの', id:'Minuman', romaji:'nomimono' }]),
@@ -911,7 +911,7 @@ const CHAPTERS = [
         ]
       },
       {
-        id: 'p3_g4', title: '4. Kantor, Transportasi & Anggota Tubuh', desc: '20 Kanji: 本社, 支社, 出張, 空港, 電話, 電車, 車, 体, 頭, 目, 口, dll. (No. 169–188)', page: 'No. 169–188', kategori: 'Kanji N5', icon: 'layers', accent: 'accent-indigo',
+        id: 'p3_g4', title: '4. Kantor, Transportasi & Anggota Tubuh', desc: '20 Kanji: 本社, 支社, 出張, 空港, 電話, 電車, 車, 体, 頭, 目, 口, dll. (No. 169–188)', page: 'No. 169–188', kategori: 'Kanji JFT', icon: 'layers', accent: 'accent-indigo',
         cards: [
           k('本社', [{ kanjiText:'本社', jp:'<ruby>本社<rt>ほんしゃ</rt></ruby>', kana:'ほんしゃ', id:'Kantor pusat', romaji:'honsha' }]),
           k('支社', [{ kanjiText:'支社', jp:'<ruby>支社<rt>ししゃ</rt></ruby>', kana:'ししゃ', id:'Kantor cabang', romaji:'shisha' }]),
@@ -944,14 +944,14 @@ const CHAPTERS = [
    ============================================================ */
 const STORE = { 
   theme:'waFlashcards.theme', 
-  learned:'waFlashcards.learnedIds_n5_186kanji_v1', 
-  excluded:'waFlashcards.excludedIds_n5_186kanji_v1', 
+  learned:'waFlashcards.learnedIds_n5_186kanji_v2', 
+  excluded:'waFlashcards.excludedIds_n5_186kanji_v2', 
   streak:'waFlashcards.streakCount', 
   lastVisit:'waFlashcards.lastVisit',
   reverseMode:'waFlashcards.reverseMode',
   autoTTS:'waFlashcards.autoTTS',
-  typeHistory:'waFlashcards.typeQuizHistory_v2',
-  speedrunSeconds:'waFlashcards.speedrunSeconds_v2'
+  typeHistory:'waFlashcards.typeQuizHistory_v3',
+  speedrunSeconds:'waFlashcards.speedrunSeconds_v3'
 };
 function safeGet(k, fb){ try{ const r = localStorage.getItem(k); return r === null ? fb : JSON.parse(r); }catch(e){ return fb; } }
 function safeSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -973,6 +973,7 @@ function learnedCountInChapter(c){ return c.groups.reduce((s,g)=> s + learnedCou
 function totalCardsAll(){ return CHAPTERS.reduce((s,c)=> s + totalCardsInChapter(c), 0); }
 function learnedCountAll(){ return CHAPTERS.reduce((s,c)=> s + learnedCountInChapter(c), 0); }
 
+/* TTS Initialization */
 function speakKana(htmlStr){
   if('speechSynthesis' in window){
     window.speechSynthesis.cancel();
@@ -986,83 +987,6 @@ function speakKana(htmlStr){
     ut.rate = 0.85;
     window.speechSynthesis.speak(ut);
   }
-}
-/* ============================================================
-   QUIZ SYSTEM (MC, MATCH & ESSAY TYPE)
-   ============================================================ */
-function shuffleArray(arr){
-  const a = arr.slice();
-  for(let i=a.length-1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function formatSec(s){
-  const m = Math.floor(s / 60);
-  const rem = s % 60;
-  return `${m < 10 ? '0' : ''}${m}:${rem < 10 ? '0' : ''}${rem}`;
-}
-
-function collectPool(chapterIds){
-  let pool = [];
-  chapterIds.forEach(cid => {
-    const chap = CHAPTERS.find(c => c.id === cid);
-    if (!chap) return;
-    chap.groups.forEach(g => {
-      g.cards.forEach((card, cIdx) => {
-        card.words.forEach((w, wIdx) => {
-          pool.push({
-            card: { 
-              type: 'kanji_item', 
-              kanji: w.kanjiText || card.kanji, 
-              kana: w.kana, 
-              arti: w.id, 
-              romaji: w.romaji, 
-              parentKanji: card.kanji 
-            },
-            groupId: g.id,
-            chapterId: cid,
-            uniqueId: `${g.id}_${card.kanji}_${wIdx}`
-          });
-        });
-      });
-    });
-  });
-  return pool;
-}
-
-function collectPoolGroup(groupId){
-  let pool = [];
-  CHAPTERS.forEach(c => {
-    const g = c.groups.find(gr => gr.id === groupId);
-    if(!g) return;
-    g.cards.forEach((card, cIdx) => {
-      card.words.forEach((w, wIdx) => {
-        pool.push({
-          card: { 
-            type: 'kanji_item', 
-            kanji: w.kanjiText || card.kanji, 
-            kana: w.kana, 
-            arti: w.id, 
-            romaji: w.romaji, 
-            parentKanji: card.kanji 
-          },
-          groupId: g.id,
-          chapterId: c.id,
-          uniqueId: `${g.id}_${card.kanji}_${wIdx}`
-        });
-      });
-    });
-  });
-  return pool;
-}
-
-function pickDistractors(pool, target, count){
-  const same = pool.filter(p => p.uniqueId !== target.uniqueId && p.card.kana !== target.card.kana);
-  let cand = shuffleArray(same).slice(0, count);
-  return cand;
 }
 
 /* ============ HIERARKI KELOMPOK BESAR & SUB-KELOMPOK ============ */
@@ -1099,13 +1023,13 @@ const BIG_GROUPS = [
 const SCOPES = {
   all_big: { 
     get label() { return `Semua Kelompok Besar (${this.build().length} Kanji)`; }, 
-    get desc() { return `Uji gabungan seluruh paket kanji yang tersedia (Paket 1, 2 & 3)`; }, 
+    get desc() { return `Uji gabungan seluruh paket kanji yang tersedia`; }, 
     icon: 'trophy', 
     accent: 'accent-gold', 
     build: () => collectPool(['paket_1', 'paket_2', 'paket_3']) 
   },
   paket_1_all: { 
-    get label() { return `Semua 62 Kanji di Paket 1 (${this.build().length})`; }, 
+    get label() { return `Semua Kanji Paket 1 (${this.build().length})`; }, 
     get desc() { return `Gabungan lengkap 6 sub-kelompok Paket 1 (No. 1–62)`; }, 
     icon: 'hanko', 
     accent: 'accent-gold', 
@@ -1154,7 +1078,7 @@ const SCOPES = {
     build: () => collectPoolGroup('p1_g6') 
   },
   paket_2_all: { 
-    get label() { return `Semua 62 Kanji di Paket 2 (${this.build().length})`; }, 
+    get label() { return `Semua Kanji Paket 2 (${this.build().length})`; }, 
     get desc() { return `Gabungan lengkap 4 sub-kelompok Paket 2 (No. 63–125)`; }, 
     icon: 'target', 
     accent: 'accent-sakura', 
@@ -1189,7 +1113,7 @@ const SCOPES = {
     build: () => collectPoolGroup('p2_g4') 
   },
   paket_3_all: { 
-    get label() { return `Semua 62 Kanji di Paket 3 (${this.build().length})`; }, 
+    get label() { return `Semua Kanji Paket 3 (${this.build().length})`; }, 
     get desc() { return `Gabungan lengkap 4 sub-kelompok Paket 3 (No. 126–188)`; }, 
     icon: 'layers', 
     accent: 'accent-indigo', 
@@ -1217,15 +1141,92 @@ const SCOPES = {
     build: () => collectPoolGroup('p3_g3') 
   },
   p3_g4: { 
-    label: '4. Kantor, Transportasi & Anggota Tubuh', 
+    label: '4. Kantor, Transportasi & Tubuh', 
     desc: '20 Kanji kantor, kendaraan, dan anatomi fisik (No. 169–188)', 
     icon: 'layers', 
     accent: 'accent-indigo', 
     build: () => collectPoolGroup('p3_g4') 
   }
 };
+/* ============================================================
+   QUIZ BUILDERS & LOGIC
+   ============================================================ */
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-/* MC Quiz Builder */
+function formatSec(s){
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return `${m < 10 ? '0' : ''}${m}:${rem < 10 ? '0' : ''}${rem}`;
+}
+
+function collectPool(chapterIds){
+  let pool = [];
+  chapterIds.forEach(cid => {
+    const chap = CHAPTERS.find(c => c.id === cid);
+    if (!chap) return;
+    chap.groups.forEach(g => {
+      g.cards.forEach((card) => {
+        card.words.forEach((w, wIdx) => {
+          pool.push({
+            card: { 
+              type: 'kanji_item', 
+              kanji: w.kanjiText || card.kanji, 
+              kana: w.kana, 
+              arti: w.id, 
+              romaji: w.romaji, 
+              parentKanji: card.kanji 
+            },
+            groupId: g.id,
+            chapterId: cid,
+            uniqueId: `${g.id}_${card.kanji}_${wIdx}`
+          });
+        });
+      });
+    });
+  });
+  return pool;
+}
+
+function collectPoolGroup(groupId){
+  let pool = [];
+  CHAPTERS.forEach(c => {
+    const g = c.groups.find(gr => gr.id === groupId);
+    if(!g) return;
+    g.cards.forEach((card) => {
+      card.words.forEach((w, wIdx) => {
+        pool.push({
+          card: { 
+            type: 'kanji_item', 
+            kanji: w.kanjiText || card.kanji, 
+            kana: w.kana, 
+            arti: w.id, 
+            romaji: w.romaji, 
+            parentKanji: card.kanji 
+          },
+          groupId: g.id,
+          chapterId: c.id,
+          uniqueId: `${g.id}_${card.kanji}_${wIdx}`
+        });
+      });
+    });
+  });
+  return pool;
+}
+
+function pickDistractors(pool, target, count){
+  const same = pool.filter(p => p.uniqueId !== target.uniqueId && p.card.kana !== target.card.kana);
+  let cand = shuffleArray(same).slice(0, count);
+  return cand;
+}
+
+/* MC Quiz Builder (Tanpa Spoiler Arti di Opsi Pilihan Ganda) */
 function buildMCQuestions(scopeKey){
   const pool = SCOPES[scopeKey].build();
   let qs = [];
@@ -1235,14 +1236,14 @@ function buildMCQuestions(scopeKey){
     const options = shuffleArray([item, ...distractors]).map(o => {
       return { 
         text: o.card.kana, 
-        sub: o.card.arti, 
+        sub: null, 
         correct: o.uniqueId === item.uniqueId 
       };
     });
     qs.push({
       item, options,
       promptMain: item.card.kanji,
-      promptSub: 'Pilih cara baca (Hiragana) & arti yang tepat'
+      promptSub: 'Pilih cara baca (Hiragana) yang tepat'
     });
   });
   return shuffleArray(qs);
@@ -1443,7 +1444,7 @@ function startCustomTypeQuiz(){
     return {
       item,
       promptMain: item.card.kanji,
-      promptSub: `Artinya: "${item.card.arti}" — Ketik cara baca Hiragana atau Romaji:`
+      promptSub: 'Ketik cara baca Hiragana atau Romaji:'
     };
   });
 
@@ -1503,6 +1504,15 @@ function startMatchQuiz(sKey){
   startTotalTimer();
 }
 
+function setupMatchRound(){
+  const q = state.quiz;
+  const round = q.rounds[q.roundIndex];
+  q.leftOrder = shuffleArray(round.map((_,i)=>i));
+  q.rightOrder = shuffleArray(round.map((_,i)=>i));
+  q.matched = new Set();
+  q.selected = null;
+}
+
 function exitQuiz(){
   if(state.quiz && !state.quiz.finished){
     if(!confirm('Yakin ingin mengakhiri latihan? Skor & progres stopwatch belum disimpan.')) return;
@@ -1512,7 +1522,6 @@ function exitQuiz(){
   state.screen = 'test-hub';
   render();
 }
-
 /* ============================================================
    RENDER: HOME
    ============================================================ */
@@ -1883,7 +1892,7 @@ function renderQuizMode(){
         <span class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('target')}</svg></span>
         <span class="m-body">
           <span class="m-title">Pilihan Ganda</span>
-          <span class="m-desc">Tebak cara baca hiragana &amp; arti dari tulisan kanji</span>
+          <span class="m-desc">Tebak cara baca hiragana murni (tanpa spoiler arti)</span>
         </span>
         <span class="g-chevron"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg></span>
       </button>
@@ -2044,7 +2053,7 @@ function quizHeaderHtml(title, sub){
 }
 
 /* ============================================================
-   RENDER: KETIK MANUAL (ESAI)
+   RENDER: KETIK MANUAL (ESAI TANPA SPOILER ARTI)
    ============================================================ */
 function renderQuizType(){
   const q = state.quiz;
@@ -2056,7 +2065,7 @@ function renderQuizType(){
   if(q.answered){
     const card = question.item.card;
     const correctMain = card.kana;
-    const correctSub = card.romaji ? `${card.romaji} · ${card.arti}` : card.arti;
+    const correctSub = card.romaji ? card.romaji : '';
 
     feedbackHtml = `
       <div class="type-feedback ${q.isCorrect ? 'correct' : 'wrong'}">
@@ -2138,7 +2147,7 @@ function renderQuizMC(){
 
   const optsHtml = question.options.map((opt, i) => `
     <button class="quiz-option" data-mc-option="${i}">
-      <span><span>${opt.text}</span>${opt.sub ? `<span style="display:block;font-size:10px;color:var(--ink-faint);margin-top:1px;">${opt.sub}</span>` : ''}</span>
+      <span><span>${opt.text}</span></span>
       <span class="opt-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span>
     </button>`).join('');
 
@@ -2173,12 +2182,12 @@ function renderQuizMatch(){
 
   const leftHtml = q.leftOrder.map(i => {
     const item = round[i];
-    return `<button class="match-tile ${tileClass('left',i)}" data-match-side="left" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}><span class="font-kanji" lang="ja" style="font-size:15px;">${item.card.kanji}</span></button>`;
+    return `<button class="match-tile ${tileClass('left',i)}" data-match-side="left" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}><span class="font-kanji" lang="ja" style="font-size:16px;">${item.card.kanji}</span></button>`;
   }).join('');
 
   const rightHtml = q.rightOrder.map(i => {
     const item = round[i];
-    return `<button class="match-tile ${tileClass('right',i)}" data-match-side="right" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}>${item.card.kana} <span style="font-size:9.5px;opacity:.7;">(${item.card.arti})</span></button>`;
+    return `<button class="match-tile ${tileClass('right',i)}" data-match-side="right" data-match-idx="${i}" ${q.matched.has(i)?'disabled':''}>${item.card.kana} <span style="font-size:10px;opacity:.7;margin-left:4px;">(${item.card.arti})</span></button>`;
   }).join('');
 
   screenEl.innerHTML = `
@@ -2235,7 +2244,7 @@ function renderQuizResult(){
 }
 
 /* ============================================================
-   EVENT DELEGATION
+   EVENT DELEGATION & INITIALIZATION
    ============================================================ */
 function render(){
   if(state.screen === 'home') renderHome();
