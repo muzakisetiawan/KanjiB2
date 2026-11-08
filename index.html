@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>和 Flashcards — Belajar 186 Kanji Dasar N5 & JFT A2</title>
+<title>和 Flashcards — Belajar 186 Kanji Dasar N5 &amp; JFT A2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
@@ -105,7 +105,7 @@
   .petal{ position:absolute; top:-10%; width:8px; height:8px; background:var(--accent-sakura); border-radius:0 100% 0 100%; opacity:.7; animation: fall linear infinite; transition: background .5s var(--ease); }
   @keyframes fall{ 0%{ transform: translate(0,0) rotate(0deg);} 100%{ transform: translate(var(--drift,30px), 280px) rotate(340deg);} }
 
-  /* ============ TOPBAR & LIVE COUNTER ============ */
+  /* ============ TOPBAR & CONTROLS ============ */
   .content{ position:relative; z-index:2; padding: 14px 14px 24px; }
   .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:8px; }
   .brand{ display:flex; flex-direction:column; gap:2px; }
@@ -113,7 +113,7 @@
   .brand .title{ display:flex; align-items:baseline; gap:6px; font-family:'Zen Kaku Gothic New','Poppins',sans-serif; font-weight:900; font-size:20px; color:var(--ink); }
   .brand .rule{ width:30px; height:2.5px; border-radius:2px; margin-top:3px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-sakura)); }
 
-  .topbar-actions{ display:flex; align-items:center; gap:8px; }
+  .topbar-actions{ display:flex; align-items:center; gap:6px; }
   
   .live-counter{
     display:inline-flex; align-items:center; gap:5px;
@@ -135,6 +135,16 @@
     70%{ box-shadow:0 0 0 6px rgba(34,197,94,0); }
     100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
   }
+
+  .icon-action-btn{
+    width:30px; height:26px; border-radius:999px;
+    border:1px solid var(--card-border); background:var(--card-bg);
+    box-shadow:var(--shadow-soft); cursor:pointer; display:flex;
+    align-items:center; justify-content:center; color:var(--ink-soft);
+    transition:var(--transition); flex-shrink:0; padding:0;
+  }
+  .icon-action-btn svg{ width:13px; height:13px; stroke:currentColor; }
+  .icon-action-btn:hover{ color:var(--ink); border-color:var(--accent-indigo); }
 
   .theme-toggle{ position:relative; width:48px; height:26px; border-radius:999px; border:1px solid var(--card-border); background:var(--card-bg); box-shadow: var(--shadow-soft); cursor:pointer; display:flex; align-items:center; padding:2px; transition:var(--transition); flex-shrink:0; }
   .theme-toggle .knob{ width:20px; height:20px; border-radius:50%; background: linear-gradient(155deg, var(--accent-gold), var(--accent-sakura-deep)); display:flex; align-items:center; justify-content:center; transform: translateX(0); transition: transform .4s var(--ease); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
@@ -218,13 +228,25 @@
   .group-row.accent-sakura{ background: linear-gradient(120deg, color-mix(in srgb, var(--accent-sakura-deep) 12%, var(--card-bg)) 0%, var(--card-bg) 65%); border-color: color-mix(in srgb, var(--accent-sakura-deep) 25%, var(--card-border)); }
   .group-row.accent-gold{ background: linear-gradient(120deg, color-mix(in srgb, var(--accent-gold) 12%, var(--card-bg)) 0%, var(--card-bg) 65%); border-color: color-mix(in srgb, var(--accent-gold) 25%, var(--card-border)); }
 
-  /* ============ BACK ROW ============ */
-  .back-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  /* ============ BACK ROW & EXPORT BUTTONS ============ */
+  .back-row{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .back-btn{ width:32px; height:32px; border-radius:10px; background:var(--card-bg); border:1px solid var(--card-border); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-soft); cursor:pointer; flex-shrink:0; }
   .back-btn svg{ width:14px; height:14px; stroke:var(--ink-soft); }
   .crumb{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
   .crumb .eyebrow{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; letter-spacing:.12em; font-weight:600; color:var(--ink-faint); text-transform:uppercase; }
-  .crumb .crumb-title{ font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; font-size:15px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .crumb .crumb-title{ font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; font-size:14.5px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .export-actions{ display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .export-btn{
+    width:32px; height:32px; border-radius:10px;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--accent-indigo); cursor:pointer; box-shadow:var(--shadow-soft);
+    transition:var(--transition), transform .15s var(--ease); padding:0;
+  }
+  .export-btn:active{ transform:scale(0.92); }
+  .export-btn svg{ width:15px; height:15px; stroke:currentColor; }
+  .export-btn.kanji-only{ color:var(--accent-sakura-deep); }
 
   /* ============ COMPACT FLASHCARD ============ */
   .meta-bar{ padding:8px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; border-radius:14px; }
@@ -235,7 +257,7 @@
   .meta-bar .meta-count{ font-family:'Poppins',sans-serif; font-size:10px; font-weight:600; color:var(--ink-soft); white-space:nowrap; }
 
   .flashcard{
-    position:relative; width:100%; height:195px; cursor:pointer; margin-bottom:12px;
+    position:relative; width:100%; height:205px; cursor:pointer; margin-bottom:12px;
     perspective:1200px; -webkit-perspective:1200px;
   }
   .exclude-btn{
@@ -293,17 +315,32 @@
   .font-kanji{ font-family:'Noto Sans JP',sans-serif; font-weight:300; font-synthesis:none; }
 
   .face-mid{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; padding:2px 0; min-height:0; }
-  .kanji-display{ font-family:'Noto Sans JP',sans-serif; font-size:32px; font-weight:300; color:var(--ink); line-height:1.2; letter-spacing:0.03em; }
+  .kanji-display{ font-family:'Noto Sans JP',sans-serif; font-size:34px; font-weight:300; color:var(--ink); line-height:1.2; letter-spacing:0.03em; }
 
-  /* Kanji compound items styling */
-  .kanji-word-list{ display:flex; flex-direction:column; gap:4px; width:100%; max-height:115px; overflow-y:auto; padding:1px 0; }
-  .kanji-word-item{
-    display:flex; align-items:center; justify-content:space-between;
-    background:var(--card-bg-soft); border:1px solid var(--card-border);
-    padding:5px 9px; border-radius:8px; gap:6px;
+  /* ============ KARTU DIBALIK (HERO PROMINENT VIEW) ============ */
+  .kanji-back-hero{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; width:100%; padding:2px 0;
   }
-  .kanji-word-jp{ font-family:'Noto Sans JP',sans-serif; font-size:15px; font-weight:300; color:var(--ink); }
-  .kanji-word-id{ font-family:'Poppins',sans-serif; font-size:11px; font-weight:600; color:var(--ink-soft); text-align:right; }
+  .kanji-back-ruby{
+    font-size:38px; font-weight:300; color:var(--ink); line-height:1.25;
+    display:inline-block;
+  }
+  .kanji-back-ruby rt{
+    font-size:0.44em; font-weight:600; color:var(--accent-indigo);
+    line-height:1; letter-spacing:0.04em;
+  }
+  .kanji-back-romaji{
+    font-family:'Poppins',sans-serif; font-size:12px; font-style:italic;
+    color:var(--ink-faint); margin-top:2px;
+  }
+  .kanji-back-arti{
+    font-family:'Poppins',sans-serif; font-size:18px; font-weight:700;
+    color:var(--accent-sakura-deep); margin-top:7px; line-height:1.25;
+  }
+  .kanji-back-divider{
+    width:36px; height:1.5px; background:var(--card-border); margin:6px auto;
+  }
 
   .face-bottom{ display:flex; align-items:center; justify-content:center; gap:5px; flex-shrink:0; }
   .flip-hint{ font-family:'Noto Sans JP',sans-serif; font-size:9.5px; color:var(--ink-faint); display:flex; align-items:center; gap:4px; }
@@ -377,7 +414,7 @@
   .score-chip.correct{ background: color-mix(in srgb, var(--color-correct) 18%, var(--card-bg)); color:var(--color-correct); }
   .score-chip.wrong{ background: color-mix(in srgb, var(--color-wrong) 18%, var(--card-bg)); color:var(--color-wrong); }
   .quiz-question{ padding:18px 14px; text-align:center; margin-bottom:12px; }
-  .quiz-option{ display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; text-align:left; padding:12px 14px; border-radius:var(--radius-md); background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px; cursor:pointer; }
+  .quiz-option{ display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; text-align:left; padding:12px 14px; border-radius:var(--radius-md); background:var(--card-bg); border:1.5px solid var(--card-border); font-family:'Noto Sans JP',sans-serif; font-size:14px; font-weight:600; color:var(--ink); margin-bottom:8px; cursor:pointer; }
   .quiz-option.is-correct{ border-color:var(--color-correct); background: color-mix(in srgb, var(--color-correct) 14%, var(--card-bg)); }
   .quiz-option.is-wrong{ border-color:var(--color-wrong); background: color-mix(in srgb, var(--color-wrong) 14%, var(--card-bg)); }
   .quiz-option.is-disabled{ pointer-events:none; opacity:.8; }
@@ -556,6 +593,12 @@
           <span class="pulse-dot"></span>
           <span id="user-count">1 sedang belajar</span>
         </div>
+        <!-- Fullscreen Button -->
+        <button class="icon-action-btn" id="fullscreenToggle" aria-label="Layar Penuh" title="Layar Penuh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="fullscreenIcon">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+        </button>
         <!-- Theme Toggle -->
         <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema">
           <span class="icon-static sun"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
@@ -651,7 +694,7 @@ const ICONS = {
 };
 function icon(name){ return ICONS[name] || ''; }
 
-/* ============ DATA BUILDER ============ */
+/* ============ DATA BUILDER & CHAPTERS ============ */
 function k(kanji, words){ return { type:'kanji', kanji, words }; }
 
 const CHAPTERS = [
@@ -727,7 +770,7 @@ const CHAPTERS = [
           k('東', [{ kanjiText:'東', jp:'<ruby>東<rt>ひがし</rt></ruby>', kana:'ひがし', id:'Timur', romaji:'higashi' }]),
           k('西', [{ kanjiText:'西', jp:'<ruby>西<rt>にし</rt></ruby>', kana:'にし', id:'Barat', romaji:'nishi' }]),
           k('南', [{ kanjiText:'南', jp:'<ruby>南<rt>みなみ</rt></ruby>', kana:'みなみ', id:'Selatan', romaji:'minami' }]),
-          k('北', [{ kanjiText:'北', jp:'<ruby>北<rt>きた</rt></ruby>', kana:'kita', id:'Utara', romaji:'kita' }]),
+          k('北', [{ kanjiText:'北', jp:'<ruby>北<rt>きた</rt></ruby>', kana:'きた', id:'Utara', romaji:'kita' }]),
           k('～口', [{ kanjiText:'～口', jp:'～<ruby>口<rt>ぐち</rt></ruby>', kana:'～ぐち', id:'~ pintu', romaji:'~guchi' }]),
           k('東口', [{ kanjiText:'東口', jp:'<ruby>東<rt>ひがし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'ひがしぐち', id:'Pintu timur', romaji:'higashiguchi' }]),
           k('西口', [{ kanjiText:'西口', jp:'<ruby>西<rt>にし</rt></ruby><ruby>口<rt>ぐち</rt></ruby>', kana:'にしぐち', id:'Pintu barat', romaji:'nishiguchi' }]),
@@ -938,20 +981,19 @@ const CHAPTERS = [
     ]
   }
 ];
-
 /* ============================================================
    STORAGE & STATE ENGINE
    ============================================================ */
 const STORE = { 
   theme:'waFlashcards.theme', 
-  learned:'waFlashcards.learnedIds_n5_186kanji_v2', 
-  excluded:'waFlashcards.excludedIds_n5_186kanji_v2', 
+  learned:'waFlashcards.learnedIds_n5_186kanji_v7', 
+  excluded:'waFlashcards.excludedIds_n5_186kanji_v7', 
   streak:'waFlashcards.streakCount', 
   lastVisit:'waFlashcards.lastVisit',
   reverseMode:'waFlashcards.reverseMode',
   autoTTS:'waFlashcards.autoTTS',
-  typeHistory:'waFlashcards.typeQuizHistory_v3',
-  speedrunSeconds:'waFlashcards.speedrunSeconds_v3'
+  typeHistory:'waFlashcards.typeQuizHistory_v6',
+  speedrunSeconds:'waFlashcards.speedrunSeconds_v6'
 };
 function safeGet(k, fb){ try{ const r = localStorage.getItem(k); return r === null ? fb : JSON.parse(r); }catch(e){ return fb; } }
 function safeSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -989,7 +1031,9 @@ function speakKana(htmlStr){
   }
 }
 
-/* ============ HIERARKI KELOMPOK BESAR & SUB-KELOMPOK ============ */
+/* ============================================================
+   HIERARKI KELOMPOK BESAR & SUB-KELOMPOK
+   ============================================================ */
 const BIG_GROUPS = [
   {
     id: 'paket_1',
@@ -1148,6 +1192,7 @@ const SCOPES = {
     build: () => collectPoolGroup('p3_g4') 
   }
 };
+
 /* ============================================================
    QUIZ BUILDERS & LOGIC
    ============================================================ */
@@ -1226,7 +1271,7 @@ function pickDistractors(pool, target, count){
   return cand;
 }
 
-/* MC Quiz Builder (Tanpa Spoiler Arti di Opsi Pilihan Ganda) */
+/* MC Quiz Builder (Tanpa Spoiler Arti) */
 function buildMCQuestions(scopeKey){
   const pool = SCOPES[scopeKey].build();
   let qs = [];
@@ -1297,7 +1342,7 @@ function checkTypeAnswer(userInput, card){
 }
 
 /* ============================================================
-   APP STATE
+   APP STATE & NAVIGATION
    ============================================================ */
 const state = { 
   screen: 'home', 
@@ -1523,7 +1568,43 @@ function exitQuiz(){
   render();
 }
 /* ============================================================
-   RENDER: HOME
+   EXPORT TXT FILE GENERATOR (GABUNGAN UTUH PER KELOMPOK)
+   ============================================================ */
+function exportChapterTxt(chapterId, mode){
+  const chap = CHAPTERS.find(c => c.id === chapterId);
+  if(!chap) return;
+
+  let totalKanjiCount = totalCardsInChapter(chap);
+  let lines = [];
+  lines.push(`=== ${chap.title} ===`);
+  lines.push(`Total Seluruh Kanji: ${totalKanjiCount} Butir\n`);
+
+  chap.groups.forEach(g => {
+    lines.push(`--- ${g.title} (${g.page}) ---`);
+    g.cards.forEach(card => {
+      card.words.forEach(w => {
+        if(mode === 'with_arti'){
+          lines.push(`${w.kanjiText || card.kanji}\t${w.kana}\t${w.id}`);
+        } else {
+          lines.push(`${w.kanjiText || card.kanji}`);
+        }
+      });
+    });
+  });
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${chap.id}_${mode === 'with_arti' ? 'Lengkap_Kanji_Arti' : 'Lengkap_Kanji_Saja'}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   RENDER: HOME (DENGAN TOMBOL EXPORT IKON)
    ============================================================ */
 function renderHome(){
   const streak = safeGet(STORE.streak, 1);
@@ -1536,21 +1617,31 @@ function renderHome(){
     const l = learnedCountInChapter(c);
     const pct = t ? Math.round((l/t)*100) : 0;
     chapHtml += `
-      <button class="bento bab-tile ${c.accent}" data-open-chapter="${c.id}">
-        <span class="glow"></span>
-        <span class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(c.icon)}</svg></span>
-        <span class="eyebrow">${c.number ? 'PAKET ' + c.number + ' · KANJI N5' : 'KANJI N5'}</span>
-        <div class="bab-title">${c.title}</div>
-        <div class="bab-desc">${c.desc}</div>
-        <div class="bab-meta">
-          <div><div class="meta-num">${c.groups.length}</div><div class="meta-label">Kelompok</div></div>
-          <div><div class="meta-num">${t}</div><div class="meta-label">Total Kartu</div></div>
-          <div><div class="meta-num">${pct}%</div><div class="meta-label">Dipelajari</div></div>
+      <div style="margin-bottom:12px;">
+        <button class="bento bab-tile ${c.accent}" data-open-chapter="${c.id}" style="margin-bottom:6px;">
+          <span class="glow"></span>
+          <span class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(c.icon)}</svg></span>
+          <span class="eyebrow">${c.number ? 'PAKET ' + c.number + ' · KANJI N5' : 'KANJI N5'}</span>
+          <div class="bab-title">${c.title}</div>
+          <div class="bab-desc">${c.desc}</div>
+          <div class="bab-meta">
+            <div><div class="meta-num">${c.groups.length}</div><div class="meta-label">Kelompok</div></div>
+            <div><div class="meta-num">${t}</div><div class="meta-label">Total Kartu</div></div>
+            <div><div class="meta-num">${pct}%</div><div class="meta-label">Dipelajari</div></div>
+          </div>
+          <div class="bab-progress">
+            <div class="progress-bar"><span style="width:${pct}%"></span></div>
+          </div>
+        </button>
+        <div style="display:flex;justify-content:flex-end;gap:6px;padding:0 4px;">
+          <button class="export-btn" data-export-chap="${c.id}" data-export-mode="with_arti" type="button" title="Download TXT Lengkap (Kanji & Arti)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button class="export-btn kanji-only" data-export-chap="${c.id}" data-export-mode="kanji_only" type="button" title="Download TXT Lengkap (Kanji Saja)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </button>
         </div>
-        <div class="bab-progress">
-          <div class="progress-bar"><span style="width:${pct}%"></span></div>
-        </div>
-      </button>`;
+      </div>`;
   });
 
   screenEl.innerHTML = `
@@ -1568,7 +1659,7 @@ function renderHome(){
         </div>
       </div>
 
-      <div class="section-label">Pilih Paket Belajar</div>
+      <div class="section-label">Pilih Paket Belajar &amp; Export TXT Lengkap</div>
       ${chapHtml}
 
       <div class="section-label">Latihan &amp; Speedrun Kanji</div>
@@ -1632,17 +1723,10 @@ function renderChapter(cid){
 }
 
 /* ============================================================
-   RENDER: DECK (FLASHCARD)
+   RENDER: DECK (KARTU SISI BELAKANG PROMINENT)
    ============================================================ */
 function renderCardFace(card, kat, pageStr){
-  const wordsHtml = card.words.map(w => `
-    <div class="kanji-word-item">
-      <span class="kanji-word-jp font-kanji" lang="ja">${w.jp}</span>
-      <span class="kanji-word-id">${w.id}</span>
-    </div>
-  `).join('');
-
-  const wordsMeaningStr = card.words.map(w => w.id).join(' / ');
+  const word = card.words[0] || { jp: card.kanji, kana: '', id: '', romaji: '' };
 
   if(state.reverseMode){
     const front = `
@@ -1652,17 +1736,22 @@ function renderCardFace(card, kat, pageStr){
       </div>
       <div class="face-mid" style="text-align:center;">
         <span class="arti-label">Makna / Bahasa Indonesia</span>
-        <span class="arti-text" style="font-size:16px;margin-top:4px;">${wordsMeaningStr}</span>
+        <span class="arti-text" style="font-size:18px;margin-top:4px;">${word.id}</span>
       </div>
-      <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk melihat kanji &amp; cara baca</span></div>`;
+      <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk melihat kanji &amp; furigana</span></div>`;
 
     const back = `
       <div class="face-top">
-        <span class="badge blue">Kanji <span class="font-kanji" lang="ja">${card.kanji}</span> · ${pageStr}</span>
+        <span class="badge blue">Kanji N5 · ${pageStr}</span>
         <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
       </div>
-      <div class="face-mid" style="text-align:left;padding:0 2px;width:100%;">
-        <div class="kanji-word-list">${wordsHtml}</div>
+      <div class="face-mid">
+        <div class="kanji-back-hero">
+          <div class="kanji-back-ruby font-kanji" lang="ja">${word.jp}</div>
+          ${word.romaji ? `<div class="kanji-back-romaji">${word.romaji}</div>` : ''}
+          <div class="kanji-back-divider"></div>
+          <div class="kanji-back-arti">${word.id}</div>
+        </div>
       </div>
       <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk kembali</span></div>`;
     return { front, back };
@@ -1670,21 +1759,27 @@ function renderCardFace(card, kat, pageStr){
 
   const front = `
     <div class="face-top">
-      <div class="face-top-left"><span class="badge sakura">Kanji N5 · ${pageStr}</span><span class="learned-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span></div>
+      <div class="face-top-left"><span class="badge">${kat} · ${pageStr}</span><span class="learned-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${icon('check')}</svg></span></div>
       <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
     </div>
     <div class="face-mid"><span class="kanji-display font-kanji" lang="ja">${card.kanji}</span></div>
-    <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk melihat cara baca &amp; arti</span></div>`;
+    <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk lihat detail</span></div>`;
 
   const back = `
     <div class="face-top">
-      <span class="badge blue">Kanji <span class="font-kanji" lang="ja">${card.kanji}</span> · ${pageStr}</span>
+      <span class="badge blue">Kanji N5 · ${pageStr}</span>
       <button class="sound-btn" type="button" aria-label="Audio" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card-bg-soft);border:1px solid var(--card-border);cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;stroke:var(--ink-soft);">${icon('speaker')}</svg></button>
     </div>
-    <div class="face-mid" style="text-align:left;padding:0 2px;width:100%;">
-      <div class="kanji-word-list">${wordsHtml}</div>
+    <div class="face-mid">
+      <div class="kanji-back-hero">
+        <div class="kanji-back-ruby font-kanji" lang="ja">${word.jp}</div>
+        ${word.romaji ? `<div class="kanji-back-romaji">${word.romaji}</div>` : ''}
+        <div class="kanji-back-divider"></div>
+        <div class="kanji-back-arti">${word.id}</div>
+      </div>
     </div>
     <div class="face-bottom"><span class="flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Ketuk untuk kembali</span></div>`;
+
   return { front, back };
 }
 
@@ -1779,7 +1874,7 @@ function renderDeck(cid, gid){
 }
 
 /* ============================================================
-   RENDER: TEST HUB (HIERARKI KELOMPOK BESAR)
+   RENDER: TEST HUB & KUIS INTERAKTIF
    ============================================================ */
 function renderTestHub(){
   let bigRows = '';
@@ -1825,9 +1920,6 @@ function renderTestHub(){
     </div>`;
 }
 
-/* ============================================================
-   RENDER: SUB-HUB (PILIHAN DI DALAM KELOMPOK 62)
-   ============================================================ */
 function renderTestSubHub(){
   const bg = BIG_GROUPS.find(b => b.id === state.pendingBigGroup) || BIG_GROUPS[0];
   const allScopeData = SCOPES[bg.allScope];
@@ -1917,9 +2009,6 @@ function renderQuizMode(){
     </div>`;
 }
 
-/* ============================================================
-   RENDER: TYPE SELECT (CHECKBOX, SPEEDRUN & HISTORY PRESET)
-   ============================================================ */
 function renderTypeSelect(){
   const sKey = state.pendingScope;
   const s = SCOPES[sKey];
@@ -1940,7 +2029,6 @@ function renderTypeSelect(){
     `;
   }).join('');
 
-  /* History List */
   const histList = safeGet(STORE.typeHistory, []).filter(h => h.scopeKey === sKey);
   let historyHtml = '';
   if(histList.length > 0){
@@ -1973,7 +2061,6 @@ function renderTypeSelect(){
         </div>
       </div>
 
-      <!-- SPEEDRUN MODE CONTROLLER -->
       <div class="speedrun-control-card">
         <div class="speedrun-header">
           <div class="speedrun-title-box">
@@ -2000,7 +2087,6 @@ function renderTypeSelect(){
         ` : ''}
       </div>
 
-      <!-- KANJI SELECTION HEADER -->
       <div class="kanji-select-bar">
         <span class="kanji-select-meta" id="selectMetaCount">${selectedCount} dari ${allCount} Kanji Terpilih</span>
         <button type="button" class="nav-btn" id="toggleSelectAllKanji" style="padding:6px 11px;font-size:11px;">
@@ -2008,19 +2094,16 @@ function renderTypeSelect(){
         </button>
       </div>
 
-      <!-- KANJI TILES GRID -->
       <div class="kanji-select-grid">
         ${gridHtml}
       </div>
 
-      <!-- ACTION BUTTON -->
       <div style="margin-top:14px;">
         <button type="button" class="nav-btn primary" id="startCustomTypeQuiz" style="width:100%;" ${selectedCount === 0 ? 'disabled' : ''}>
           Mulai Latihan (${selectedCount} Soal)<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon('chevRight')}</svg>
         </button>
       </div>
 
-      <!-- HISTORY PRESETS -->
       ${historyHtml}
     </div>
   `;
@@ -2052,9 +2135,6 @@ function quizHeaderHtml(title, sub){
     </div>`;
 }
 
-/* ============================================================
-   RENDER: KETIK MANUAL (ESAI TANPA SPOILER ARTI)
-   ============================================================ */
 function renderQuizType(){
   const q = state.quiz;
   if(q.index >= q.questions.length){ renderQuizResult(); return; }
@@ -2297,6 +2377,15 @@ screenEl.addEventListener('click', (e)=>{
 
   const openQuizMode = e.target.closest('[data-open-quiz-mode]');
   if(openQuizMode){ goQuizMode(openQuizMode.getAttribute('data-open-quiz-mode')); return; }
+
+  /* Tombol Export TXT (Kelompok Lengkap) */
+  const exportBtn = e.target.closest('[data-export-chap]');
+  if(exportBtn){
+    const cid = exportBtn.getAttribute('data-export-chap');
+    const mode = exportBtn.getAttribute('data-export-mode');
+    exportChapterTxt(cid, mode);
+    return;
+  }
 
   if(e.target.closest('#openTestHub')){ goTestHub(); return; }
   if(e.target.closest('#backTestHub')){ goTestHub(); return; }
@@ -2575,6 +2664,32 @@ screenEl.addEventListener('submit', (e)=>{
   if(e.target.id === 'typeQuizForm'){
     e.preventDefault();
     handleTypeSubmit();
+  }
+});
+
+/* ============================================================
+   FULLSCREEN HANDLER
+   ============================================================ */
+const fsBtn = document.getElementById('fullscreenToggle');
+const fsIcon = document.getElementById('fullscreenIcon');
+const enterFsPath = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>';
+const exitFsPath = '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>';
+
+fsBtn.addEventListener('click', ()=>{
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+  }
+});
+
+document.addEventListener('fullscreenchange', ()=>{
+  if(document.fullscreenElement){
+    fsIcon.innerHTML = exitFsPath;
+    fsBtn.setAttribute('title', 'Keluar Layar Penuh');
+  } else {
+    fsIcon.innerHTML = enterFsPath;
+    fsBtn.setAttribute('title', 'Layar Penuh');
   }
 });
 
